@@ -1,0 +1,622 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MyQuest API · KEY TESTER (CORS FIXED)</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        body {
+            background: #f5f9ff;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            padding: 2rem 1.5rem;
+            color: #0a2540;
+        }
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+        .header {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            margin-bottom: 2rem;
+        }
+        .header h1 {
+            font-size: 1.9rem;
+            font-weight: 600;
+            letter-spacing: -0.01em;
+            background: linear-gradient(145deg, #0b2b4a, #133e5e);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .sub {
+            color: #4a6f8a;
+            font-weight: 400;
+            border-left: 5px solid #2f7bc5;
+            padding-left: 1rem;
+            background: #e8f0fe80;
+            padding: 0.8rem 1.2rem;
+            border-radius: 12px;
+            font-size: 0.95rem;
+        }
+        .api-card {
+            background: white;
+            border-radius: 28px;
+            box-shadow: 0 12px 32px -8px rgba(0,35,65,0.12);
+            padding: 1.8rem 2rem;
+            margin-bottom: 2rem;
+            border: 1px solid #ffffff50;
+        }
+        .key-section {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: flex-end;
+            gap: 1.2rem;
+        }
+        .key-field {
+            flex: 2 1 260px;
+        }
+        .key-field label {
+            display: block;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            font-weight: 700;
+            color: #2c577c;
+            margin-bottom: 0.4rem;
+        }
+        .key-input-wrapper {
+            display: flex;
+            align-items: center;
+            background: #f2f6fb;
+            border-radius: 60px;
+            border: 1px solid #d9e2ef;
+        }
+        .key-prefix {
+            color: #4b7a9c;
+            font-weight: 500;
+            font-size: 0.9rem;
+            padding-left: 1.2rem;
+            white-space: nowrap;
+        }
+        #apiKeyInput {
+            width: 100%;
+            padding: 0.9rem 0.9rem 0.9rem 0.2rem;
+            border: none;
+            background: transparent;
+            font-size: 0.95rem;
+            outline: none;
+            font-family: monospace;
+        }
+        .save-btn {
+            background: #0a4b6e;
+            border: none;
+            border-radius: 50px;
+            padding: 0.8rem 2rem;
+            color: white;
+            font-weight: 600;
+            font-size: 0.95rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        .save-btn:hover {
+            background: #0e6190;
+            transform: scale(1.02);
+        }
+        .endpoint-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+            gap: 1.2rem;
+            margin: 2.2rem 0 1.8rem;
+        }
+        .ep-btn {
+            background: white;
+            border: 1px solid #cdddec;
+            padding: 1.2rem 0.8rem;
+            border-radius: 20px;
+            font-weight: 600;
+            color: #1f4662;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.3rem;
+            transition: 0.16s;
+            cursor: pointer;
+        }
+        .ep-btn.active {
+            background: #e3effa;
+            border-color: #0f6c9e;
+            color: #0c4e70;
+            box-shadow: 0 8px 16px -8px #0a4b6e40;
+        }
+        .ep-btn:hover {
+            background: #ecf3fa;
+            border-color: #4d94c0;
+        }
+        .ep-icon {
+            font-size: 1.6rem;
+            line-height: 1;
+        }
+        .ep-label {
+            font-size: 0.9rem;
+        }
+        .param-panel {
+            background: #f2f8ff;
+            border-radius: 20px;
+            padding: 1.6rem 1.8rem;
+            margin-bottom: 1.6rem;
+            border: 1px solid #d2e1f0;
+        }
+        .param-title {
+            font-weight: 700;
+            margin-bottom: 1.2rem;
+            color: #0d3750;
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+            flex-wrap: wrap;
+        }
+        .param-fields {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1.2rem 2rem;
+            align-items: flex-end;
+        }
+        .param-item {
+            display: flex;
+            flex-direction: column;
+            min-width: 160px;
+        }
+        .param-item label {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            font-weight: 700;
+            color: #456f88;
+            letter-spacing: 0.04em;
+            margin-bottom: 0.3rem;
+        }
+        .param-item input, .param-item select {
+            background: white;
+            border: 1px solid #cbdae5;
+            padding: 0.6rem 1rem;
+            border-radius: 16px;
+            font-size: 0.9rem;
+            outline: none;
+            transition: 0.2s;
+        }
+        .param-item input:focus, .param-item select:focus {
+            border-color: #1c7ebe;
+            box-shadow: 0 0 0 3px #1c7ebe30;
+        }
+        .call-btn {
+            background: #1a6e4b;
+            color: white;
+            border: none;
+            padding: 0.7rem 2rem;
+            border-radius: 60px;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.6rem;
+            cursor: pointer;
+            transition: 0.16s;
+            font-size: 0.95rem;
+        }
+        .call-btn:hover {
+            background: #218f60;
+        }
+        .response-area {
+            background: #0b1e2c;
+            color: #d7edff;
+            border-radius: 18px;
+            padding: 1.4rem 1.6rem;
+            font-family: 'JetBrains Mono', 'Fira Code', monospace;
+            font-size: 0.85rem;
+            overflow-x: auto;
+            white-space: pre-wrap;
+            word-break: break-word;
+            max-height: 500px;
+            overflow-y: auto;
+            border: 1px solid #3f6280;
+            margin-top: 0.8rem;
+        }
+        .status-badge {
+            display: inline-block;
+            background: #2c577c;
+            padding: 0.3rem 1rem;
+            border-radius: 30px;
+            color: white;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            margin-bottom: 0.6rem;
+            letter-spacing: 0.06em;
+        }
+        .cors-warning {
+            background: #fff3cd;
+            border: 1px solid #ffc107;
+            color: #856404;
+            padding: 1rem 1.4rem;
+            border-radius: 14px;
+            margin-top: 1.4rem;
+            font-size: 0.9rem;
+        }
+        .proxy-toggle {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            margin-top: 1rem;
+            padding: 0.8rem 1.2rem;
+            background: #e9ecef;
+            border-radius: 40px;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="header">
+        <h1>🔌 MyQuest API · CORS Test Harness</h1>
+        <div class="sub">
+            🔑 Testing key: <code style="background: #d4e3fd; padding: 0.2rem 0.5rem; border-radius: 8px;">f2812cef78...145f</code> · Includes CORS proxy fallback
+        </div>
+    </div>
+
+    <!-- API KEY CARD (pre-filled with your key) -->
+    <div class="api-card">
+        <div class="key-section">
+            <div class="key-field">
+                <label>🔐 API AUTHORIZATION BEARER</label>
+                <div class="key-input-wrapper">
+                    <span class="key-prefix">Bearer&nbsp;</span>
+                    <input type="text" id="apiKeyInput" value="f2812cef784d06464971aa62dd81a777e58b1a0dc06e9e4ef3f07722e6ba145f" autocomplete="off">
+                </div>
+            </div>
+            <button class="save-btn" id="saveKeyBtn">
+                <span>💾</span> Save Key
+            </button>
+        </div>
+    </div>
+
+    <!-- CORS PROXY TOGGLE -->
+    <div class="proxy-toggle">
+        <span style="font-weight: 600;">🌐 CORS Proxy:</span>
+        <label style="display: flex; align-items: center; gap: 0.4rem;">
+            <input type="radio" name="proxyMode" value="direct" id="proxyDirect"> 
+            <span>Direct (No proxy) - may fail due to CORS</span>
+        </label>
+        <label style="display: flex; align-items: center; gap: 0.4rem;">
+            <input type="radio" name="proxyMode" value="corsproxy" id="proxyCORS" checked> 
+            <span>Use CORS Proxy (recommended for testing)</span>
+        </label>
+    </div>
+
+    <!-- ENDPOINT SELECTOR -->
+    <div style="font-weight: 600; margin-bottom: 0.2rem;">📡 1. Select endpoint</div>
+    <div class="endpoint-grid" id="endpointSelector">
+        <div class="ep-btn active" data-endpoint="examList">
+            <span class="ep-icon">📋</span>
+            <span class="ep-label">GET EXAM LIST</span>
+            <span style="font-size:0.7rem; opacity:0.8;">?get=exam</span>
+        </div>
+        <div class="ep-btn" data-endpoint="yearList">
+            <span class="ep-icon">📅</span>
+            <span class="ep-label">GET YEAR LIST</span>
+            <span style="font-size:0.7rem; opacity:0.8;">?get=exam_year_id</span>
+        </div>
+        <div class="ep-btn" data-endpoint="subjectList">
+            <span class="ep-icon">📚</span>
+            <span class="ep-label">GET SUBJECTS</span>
+            <span style="font-size:0.7rem; opacity:0.8;">?get=subject</span>
+        </div>
+        <div class="ep-btn" data-endpoint="questions">
+            <span class="ep-icon">❓</span>
+            <span class="ep-label">QUESTIONS</span>
+            <span style="font-size:0.7rem; opacity:0.8;">POST /api/questions</span>
+        </div>
+    </div>
+
+    <!-- PARAMETER PANEL -->
+    <div class="param-panel" id="paramPanel">
+        <div class="param-title">
+            <span>⚙️ REQUEST PARAMETERS</span>
+            <span style="font-weight:normal; font-size:0.8rem; background: #cfe2f0; padding: 0.2rem 0.8rem; border-radius: 40px;" id="endpointPath">POST /api/questions?get=exam</span>
+        </div>
+        <div id="paramFieldsContainer" class="param-fields">
+            <!-- dynamic injection -->
+        </div>
+        <div style="margin-top: 1.6rem; display: flex; justify-content: flex-end; gap: 1rem;">
+            <button class="call-btn" id="executeCallBtn">
+                <span>🚀</span> EXECUTE REQUEST
+            </button>
+        </div>
+    </div>
+
+    <!-- RESPONSE DISPLAY -->
+    <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.4rem;">
+        <span class="status-badge" id="responseStatus">⚡ READY</span>
+        <span style="font-size:0.75rem; color:#356f92;" id="requestMeta"></span>
+    </div>
+    <div class="response-area" id="responseDisplay">
+        👋 Click "Execute Request" to test your API key.
+        Using CORS proxy by default to bypass browser restrictions.
+    </div>
+    
+    <div class="cors-warning">
+        <strong>⚠️ CORS Issue Detected:</strong> Your previous request failed because browsers block direct API calls due to CORS. 
+        The tool now uses a CORS proxy by default. If that also fails, try these alternatives:
+        <ul style="margin-top: 0.5rem; margin-left: 1.5rem;">
+            <li>Use a browser extension like "CORS Unblock" temporarily</li>
+            <li>Test using <strong>Postman</strong> or <strong>curl</strong> (recommended for real validation)</li>
+            <li>Ask the API provider to whitelist your domain</li>
+        </ul>
+    </div>
+
+    <!-- QUICK CURL COMMAND -->
+    <div style="background: #1e2e3b; color: #d4d4d4; padding: 1.2rem; border-radius: 16px; margin-top: 1.5rem;">
+        <div style="display: flex; gap: 0.8rem; align-items: center; margin-bottom: 0.8rem;">
+            <span style="background: #ff9800; padding: 0.2rem 0.8rem; border-radius: 20px; color: black; font-weight: bold;">💻 CURL TEST</span>
+            <span style="color: #bbb;">Use this command to test directly (no CORS issues):</span>
+        </div>
+        <pre id="curlCommand" style="background: #0d1c26; padding: 1rem; border-radius: 12px; overflow-x: auto; color: #ce9178; font-size: 0.85rem;">curl -X POST https://api.myquest.com.ng/api/questions?get=exam \
+  -H "Authorization: Bearer f2812cef784d06464971aa62dd81a777e58b1a0dc06e9e4ef3f07722e6ba145f" \
+  -H "Content-Type: application/json" \
+  -d "{}"</pre>
+    </div>
+</div>
+
+<script>
+    // CONFIGURATION
+    const BASE_URL = 'https://api.myquest.com.ng/api/questions';
+    const PROXY_URL = 'https://corsproxy.io/?';  // Public CORS proxy
+    // Alternative proxies (uncomment if needed):
+    // const PROXY_URL = 'https://api.codetabs.com/v1/proxy?quest=';
+    // const PROXY_URL = 'https://cors-anywhere.herokuapp.com/';
+    
+    // STATE
+    let activeEndpoint = 'examList';
+    let bearerToken = document.getElementById('apiKeyInput').value;
+    
+    // DOM Elements
+    const apiKeyInput = document.getElementById('apiKeyInput');
+    const saveKeyBtn = document.getElementById('saveKeyBtn');
+    const endpointDivs = document.querySelectorAll('.ep-btn');
+    const paramFieldsContainer = document.getElementById('paramFieldsContainer');
+    const endpointPathSpan = document.getElementById('endpointPath');
+    const responseDisplay = document.getElementById('responseDisplay');
+    const responseStatus = document.getElementById('responseStatus');
+    const requestMeta = document.getElementById('requestMeta');
+    const executeBtn = document.getElementById('executeCallBtn');
+    const proxyDirect = document.getElementById('proxyDirect');
+    const proxyCORS = document.getElementById('proxyCORS');
+    const curlCommand = document.getElementById('curlCommand');
+
+    // Get current proxy setting
+    function useProxy() {
+        return proxyCORS.checked;
+    }
+
+    // Build full URL with optional proxy
+    function buildUrl() {
+        let endpoint = BASE_URL;
+        
+        // Add query parameters based on endpoint
+        if (activeEndpoint === 'examList') endpoint += '?get=exam';
+        else if (activeEndpoint === 'yearList') endpoint += '?get=exam_year_id';
+        else if (activeEndpoint === 'subjectList') endpoint += '?get=subject';
+        
+        // Wrap with proxy if enabled
+        if (useProxy()) {
+            return PROXY_URL + encodeURIComponent(endpoint);
+        }
+        return endpoint;
+    }
+
+    // Update endpoint display
+    function getEndpointDisplay() {
+        if (activeEndpoint === 'examList') return 'POST /api/questions?get=exam';
+        if (activeEndpoint === 'yearList') return 'POST /api/questions?get=exam_year_id';
+        if (activeEndpoint === 'subjectList') return 'POST /api/questions?get=subject';
+        if (activeEndpoint === 'questions') return 'POST /api/questions';
+        return '';
+    }
+
+    // Render parameter fields based on endpoint
+    function renderParamsForEndpoint(endpoint) {
+        let html = '';
+        endpointPathSpan.innerText = getEndpointDisplay();
+
+        if (endpoint === 'examList') {
+            html = `<div class="param-item">
+                        <label>📌 REQUEST BODY</label>
+                        <input type="text" disabled value="{} (empty)" style="background:#e5ecf1;">
+                    </div>`;
+        } else if (endpoint === 'yearList') {
+            html = `<div class="param-item">
+                        <label>📋 EXAM *</label>
+                        <input type="text" id="paramExam" placeholder="e.g. JAMB, WAEC" value="JAMB">
+                    </div>`;
+        } else if (endpoint === 'subjectList') {
+            html = `<div class="param-item">
+                        <label>📋 EXAM *</label>
+                        <input type="text" id="paramExam" placeholder="JAMB, WAEC" value="JAMB">
+                    </div>
+                    <div class="param-item">
+                        <label>📅 YEAR ID *</label>
+                        <input type="text" id="paramYearId" placeholder="e.g. 2001, 2024" value="2001">
+                    </div>`;
+        } else if (endpoint === 'questions') {
+            html = `<div class="param-item">
+                        <label>📋 EXAM *</label>
+                        <input type="text" id="paramExam" placeholder="JAMB, WAEC" value="JAMB">
+                    </div>
+                    <div class="param-item">
+                        <label>📅 YEAR ID *</label>
+                        <input type="text" id="paramYearId" placeholder="1999, 2023" value="1999">
+                    </div>
+                    <div class="param-item">
+                        <label>📘 SUBJECT</label>
+                        <input type="text" id="paramSubject" placeholder="government, maths" value="government">
+                    </div>
+                    <div class="param-item">
+                        <label>📄 PAGE</label>
+                        <input type="number" id="paramPage" placeholder="1" value="1" min="1">
+                    </div>`;
+        }
+        paramFieldsContainer.innerHTML = html;
+        updateCurlCommand();
+    }
+
+    // Build request body
+    function buildRequestBody() {
+        if (activeEndpoint === 'examList') {
+            return {};
+        } else if (activeEndpoint === 'yearList') {
+            return { exam: document.getElementById('paramExam')?.value?.trim() || 'JAMB' };
+        } else if (activeEndpoint === 'subjectList') {
+            return {
+                exam: document.getElementById('paramExam')?.value?.trim() || 'JAMB',
+                exam_year_id: document.getElementById('paramYearId')?.value?.trim() || '2001'
+            };
+        } else if (activeEndpoint === 'questions') {
+            return {
+                exam: document.getElementById('paramExam')?.value?.trim() || 'JAMB',
+                exam_year_id: document.getElementById('paramYearId')?.value?.trim() || '1999',
+                subject: document.getElementById('paramSubject')?.value?.trim() || 'government',
+                page: parseInt(document.getElementById('paramPage')?.value || '1', 10)
+            };
+        }
+        return {};
+    }
+
+    // Update curl command
+    function updateCurlCommand() {
+        const url = BASE_URL + (activeEndpoint === 'examList' ? '?get=exam' : 
+                              activeEndpoint === 'yearList' ? '?get=exam_year_id' :
+                              activeEndpoint === 'subjectList' ? '?get=subject' : '');
+        const body = JSON.stringify(buildRequestBody(), null, 2);
+        curlCommand.textContent = `curl -X POST "${url}" \\\n  -H "Authorization: Bearer ${bearerToken}" \\\n  -H "Content-Type: application/json" \\\n  -d '${body}'`;
+    }
+
+    // Execute API call
+    async function callApi() {
+        if (!bearerToken || bearerToken === '') {
+            responseDisplay.innerText = '❌ Please enter a valid API key';
+            responseStatus.innerText = '⛔ NO KEY';
+            return;
+        }
+
+        const url = buildUrl();
+        const requestBody = buildRequestBody();
+        
+        const headers = {
+            'Authorization': `Bearer ${bearerToken}`,
+            'Content-Type': 'application/json'
+        };
+
+        // Special handling for corsproxy.io
+        if (useProxy() && PROXY_URL.includes('corsproxy.io')) {
+            // corsproxy.io expects different format
+            delete headers['Content-Type'];
+        }
+
+        responseStatus.innerText = '⏳ CALLING API...';
+        requestMeta.innerText = `${useProxy() ? '🔄 PROXY: ' : '📡 DIRECT: '}POST ${url}`;
+        responseDisplay.innerText = '⏳ Waiting for response...\n\nIf this takes more than 10 seconds, the proxy may be slow or the API is unreachable.';
+
+        try {
+            const controller = new AbortController();
+            const timeoutId = setTimeout(() => controller.abort(), 15000); // 15 second timeout
+            
+            const response = await fetch(url, {
+                method: 'POST',
+                headers: headers,
+                body: JSON.stringify(requestBody),
+                signal: controller.signal
+            });
+            
+            clearTimeout(timeoutId);
+
+            let responseData;
+            const contentType = response.headers.get('content-type');
+            
+            if (contentType && contentType.includes('application/json')) {
+                responseData = await response.json();
+            } else {
+                const text = await response.text();
+                responseData = { 
+                    status: response.status,
+                    statusText: response.statusText,
+                    body: text.substring(0, 1000) // Limit size
+                };
+            }
+
+            // Pretty print JSON
+            responseDisplay.innerHTML = `<pre style="margin:0; font-family: inherit;">${JSON.stringify(responseData, null, 2)}</pre>`;
+            
+            if (response.ok) {
+                responseStatus.innerText = `✅ SUCCESS (${response.status})`;
+            } else {
+                responseStatus.innerText = `❌ ERROR ${response.status}`;
+            }
+
+        } catch (error) {
+            console.error('API call failed:', error);
+            
+            if (error.name === 'AbortError') {
+                responseDisplay.innerText = '❌ Request timeout after 15 seconds\n\nThe API server might be down or blocking the request.';
+            } else {
+                responseDisplay.innerText = `❌ ERROR: ${error.message || 'Failed to fetch'}\n\nThis is usually a CORS issue. Try:\n1. Using the CORS proxy (already enabled)\n2. Testing with curl (see below)\n3. Installing a CORS browser extension`;
+            }
+            responseStatus.innerText = '❌ FAILED';
+        }
+        
+        updateCurlCommand();
+    }
+
+    // Set active endpoint
+    function setActiveEndpoint(endpointId) {
+        activeEndpoint = endpointId;
+        endpointDivs.forEach(btn => {
+            const data = btn.getAttribute('data-endpoint');
+            btn.classList.toggle('active', data === endpointId);
+        });
+        renderParamsForEndpoint(endpointId);
+    }
+
+    // Event Listeners
+    saveKeyBtn.addEventListener('click', function() {
+        bearerToken = apiKeyInput.value.trim();
+        responseStatus.innerText = '🔑 KEY UPDATED';
+        responseDisplay.innerText = `✅ Bearer token saved: ${bearerToken.substring(0, 8)}...${bearerToken.slice(-8)}`;
+        updateCurlCommand();
+    });
+
+    endpointDivs.forEach(btn => {
+        btn.addEventListener('click', function() {
+            setActiveEndpoint(this.getAttribute('data-endpoint'));
+        });
+    });
+
+    executeBtn.addEventListener('click', callApi);
+
+    // Proxy toggle listeners
+    proxyDirect.addEventListener('change', updateCurlCommand);
+    proxyCORS.addEventListener('change', updateCurlCommand);
+
+    // Initialize
+    window.addEventListener('DOMContentLoaded', function() {
+        setActiveEndpoint('examList');
+        bearerToken = apiKeyInput.value;
+        updateCurlCommand();
+    });
+</script>
+</body>
+</html>
