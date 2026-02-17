@@ -10,14 +10,14 @@ export const Navigation = () => {
             <div className="bg-primary p-2 rounded-lg">
               <Icon name="school" className="text-white" />
             </div>
-            <span className="text-2xl font-bold text-primary tracking-tight">
-              JAMB<span className="text-slate-700 dark:text-white">Prep</span>
+            <span className="text-2xl font-bold tracking-tight">
+              <span className="text-primary">Exam</span><span className="text-slate-700 dark:text-white">Prep</span>
             </span>
           </div>
           
           <div className="hidden md:flex items-center gap-8">
-            <a href="#practice" className="font-medium hover:text-primary transition-colors">Practice</a>
-            <a href="#leaderboard" className="font-medium hover:text-primary transition-colors">Leaderboard</a>
+            <a href="#exams" className="font-medium hover:text-primary transition-colors">Exams</a>
+            <a href="#features" className="font-medium hover:text-primary transition-colors">Features</a>
             <a href="#pricing" className="font-medium hover:text-primary transition-colors">Pricing</a>
             <a href="#resources" className="font-medium hover:text-primary transition-colors">Resources</a>
           </div>
