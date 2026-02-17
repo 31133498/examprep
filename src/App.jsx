@@ -1,51 +1,75 @@
-import { Navigation } from './components/sections/Navigation';
-import { Hero } from './components/sections/Hero';
-import { Stats } from './components/sections/Stats';
-import { Subjects } from './components/sections/Subjects';
-import { Features } from './components/sections/Features';
-import { GamifiedFeatures } from './components/sections/GamifiedFeatures';
-import { Testimonials } from './components/sections/Testimonials';
-import { SuccessStories } from './components/sections/SuccessStories';
-import { CTA } from './components/sections/CTA';
-import { Footer } from './components/sections/Footer';
+import { ExamSelection } from './pages/ExamSelection';
+import { JAMBLanding } from './pages/JAMBLanding';
 import { SubjectSetup } from './pages/SubjectSetup';
+import { Navigation } from './components/sections/Navigation';
+import { Button } from './components/ui/Button';
+import { Icon } from './components/ui/Icon';
 import { useState } from 'react';
+import { motion } from 'framer-motion';
 
 function App() {
+  const [currentView, setCurrentView] = useState('home'); // 'home' | 'exam' | 'subject'
+  const [selectedExam, setSelectedExam] = useState(null);
   const [selectedSubject, setSelectedSubject] = useState(null);
 
-  // Show subject setup page when a subject is selected
-  if (selectedSubject) {
+  const handleExamSelect = (examId) => {
+    setSelectedExam(examId);
+    setCurrentView('exam');
+  };
+
+  const handleSubjectSelect = (subject) => {
+    setSelectedSubject(subject);
+    setCurrentView('subject');
+  };
+
+  const handleBackToExams = () => {
+    setSelectedExam(null);
+    setCurrentView('home');
+  };
+
+  const handleBackToJAMB = () => {
+    setSelectedSubject(null);
+    setCurrentView('exam');
+  };
+
+  // Level 3: Subject Setup Page
+  if (currentView === 'subject' && selectedSubject) {
     return (
       <div className="bg-background-light dark:bg-background-dark">
         <Navigation />
-        <div className="py-8">
-          <button
-            onClick={() => setSelectedSubject(null)}
-            className="max-w-7xl mx-auto px-4 mb-4 text-primary font-bold flex items-center gap-2 hover:gap-3 transition-all"
+        <motion.div 
+          className="fixed top-20 left-4 z-40"
+          initial={{ opacity: 0, x: -20 }}
+          animate={{ opacity: 1, x: 0 }}
+        >
+          <Button 
+            variant="secondary" 
+            onClick={handleBackToJAMB}
+            className="shadow-lg backdrop-blur-sm bg-white/90 dark:bg-slate-800/90"
           >
-            ← Back to Home
-          </button>
+            <Icon name="arrow_back" size="sm" />
+            Back to Subjects
+          </Button>
+        </motion.div>
+        <div className="py-8">
           <SubjectSetup subject={selectedSubject} />
         </div>
       </div>
     );
   }
 
-  return (
-    <div className="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 transition-colors duration-300">
-      <Navigation />
-      <Hero />
-      <Stats />
-      <Subjects onSubjectSelect={setSelectedSubject} />
-      <Features />
-      <GamifiedFeatures />
-      <Testimonials />
-      <SuccessStories />
-      <CTA />
-      <Footer />
-    </div>
-  );
+  // Level 2: JAMB Landing Page (only JAMB for now, expandable for other exams)
+  if (currentView === 'exam' && selectedExam === 'jamb') {
+    return (
+      <JAMBLanding 
+        onSubjectSelect={handleSubjectSelect}
+        onBackToExams={handleBackToExams}
+      />
+    );
+  }
+
+  // Level 1: Exam Selection (Home)
+  return <ExamSelection onExamSelect={handleExamSelect} />;
 }
 
 export default App;

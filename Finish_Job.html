@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>MyQuest FINAL LEG (2024-2025)</title>
+    <style>
+        body { font-family: 'Segoe UI', sans-serif; background: #0f172a; color: white; padding: 20px; }
+        .container { max-width: 800px; margin: 0 auto; }
+        .log { background: #1e293b; padding: 15px; border-radius: 10px; height: 400px; overflow-y: auto; font-family: monospace; border: 1px solid #334155; box-shadow: inset 0 0 10px #000; }
+        .stats { margin-bottom: 15px; font-size: 1.2rem; color: #38bdf8; font-weight: bold; }
+        .controls { margin-bottom: 20px; display: flex; gap: 10px; background: #334155; padding: 15px; border-radius: 12px; }
+        button { padding: 12px 25px; cursor: pointer; font-weight: bold; border-radius: 5px; border: none; font-size: 1rem; transition: 0.2s; }
+        #startBtn { background: #3b82f6; color: white; }
+        #startBtn:hover { background: #2563eb; }
+        #startBtn:disabled { background: #64748b; cursor: not-allowed; }
+        input { flex-grow: 1; padding: 10px; border-radius: 5px; border: none; outline: none; font-family: monospace; }
+        .entry { margin-bottom: 5px; border-bottom: 1px solid #334155; padding-bottom: 2px; font-size: 0.9rem; }
+        .success { color: #4ade80; }
+        .error { color: #f87171; }
+        .info { color: #fbbf24; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🚀 Final Leg: 2024 & 2025 Only</h1>
+        <div class="stats" id="stats">Waiting for New Key...</div>
+        
+        <div class="controls">
+            <input type="text" id="apiKey" placeholder="PASTE YOUR NEW API KEY HERE">
+            <button id="startBtn">START FINAL DOWNLOAD</button>
+        </div>
+
+        <div class="log" id="log">
+            <div class="entry info">ℹ️ This script will download JAMB Years: 2024 and 2025</div>
+            <div class="entry info">ℹ️ It will save to a file named: JAMB_FINAL_PART.json</div>
+        </div>
+    </div>
+
+    <script>
+        const PROXY = "https://corsproxy.io/?";
+        const BASE_URL = "https://api.myquest.com.ng/api/questions";
+        
+        const logEl = document.getElementById('log');
+        const statsEl = document.getElementById('stats');
+        const startBtn = document.getElementById('startBtn');
+        const keyInput = document.getElementById('apiKey');
+
+        let masterData = [];
+
+        function addLog(msg, type = '') {
+            const div = document.createElement('div');
+            div.className = 'entry ' + type;
+            div.innerText = `[${new Date().toLocaleTimeString()}] ${msg}`;
+            logEl.prepend(div);
+        }
+
+        async function apiCall(endpoint, body, key) {
+            const url = PROXY + encodeURIComponent(BASE_URL + endpoint);
+            try {
+                const res = await fetch(url, {
+                    method: 'POST',
+                    headers: { 'Authorization': `Bearer ${key}` },
+                    body: JSON.stringify(body)
+                });
+                return await res.json();
+            } catch (e) {
+                return null;
+            }
+        }
+
+        startBtn.addEventListener('click', async () => {
+            const NEW_KEY = keyInput.value.trim();
+            if(NEW_KEY.length < 10) {
+                alert("Please paste a valid API Key!");
+                return;
+            }
+
+            startBtn.disabled = true;
+            keyInput.disabled = true;
+            masterData = [];
+            
+            // --- CONFIGURATION: YEARS TO DOWNLOAD ---
+            const years = [2024, 2025]; 
+
+            addLog("🚀 Starting extraction with NEW KEY...", "info");
+
+            for (let year of years) {
+                statsEl.innerText = `Processing Year: ${year} | Questions Collected: ${masterData.length}`;
+                addLog(`📅 Fetching subject list for ${year}...`);
+
+                const subjData = await apiCall('?get=subject', { exam: "JAMB", exam_year_id: year.toString() }, NEW_KEY);
+                
+                if (subjData && subjData.success) {
+                    for (let subject of subjData.data) {
+                        addLog(`  ⏳ Downloading ${subject}...`);
+                        
+                        const qData = await apiCall('', {
+                            exam: "JAMB",
+                            exam_year_id: year.toString(),
+                            subject: subject,
+                            page: 1
+                        }, NEW_KEY);
+
+                        if (qData && qData.success) {
+                            masterData.push({
+                                year: year,
+                                subject: subject,
+                                questions: qData.data.questions
+                            });
+                            addLog(`     ✅ Success: ${subject}`, 'success');
+                        } else {
+                            addLog(`     ❌ Failed: ${subject} (Check Balance)`, 'error');
+                        }
+                        
+                        // 3 Second Safety Delay
+                        await new Promise(r => setTimeout(r, 3000));
+                    }
+                } else {
+                    addLog(`❌ Could not access year ${year}. Check Key/Balance.`, 'error');
+                }
+            }
+
+            // DOWNLOAD FILE
+            addLog("🎉 DONE! Downloading the file now...", "success");
+            const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(masterData, null, 4));
+            const downloadAnchorNode = document.createElement('a');
+            downloadAnchorNode.setAttribute("href", dataStr);
+            downloadAnchorNode.setAttribute("download", "JAMB_FINAL_PART_2024_2025.json");
+            document.body.appendChild(downloadAnchorNode);
+            downloadAnchorNode.click();
+            downloadAnchorNode.remove();
+            
+            startBtn.disabled = false;
+            keyInput.disabled = false;
+            statsEl.innerText = "MISSION COMPLETE!";
+        });
+    </script>
+</body>
+</html>

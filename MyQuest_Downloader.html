@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>MyQuest BULK DOWNLOADER</title>
+    <style>
+        body { font-family: sans-serif; background: #0f172a; color: white; padding: 20px; }
+        .log { background: #1e293b; padding: 15px; border-radius: 10px; height: 400px; overflow-y: auto; font-family: monospace; border: 1px solid #334155; }
+        .stats { margin-bottom: 10px; font-size: 1.2rem; color: #38bdf8; }
+        .controls { margin-bottom: 20px; display: flex; gap: 10px; }
+        button { padding: 10px 20px; cursor: pointer; font-weight: bold; border-radius: 5px; border: none; }
+        #startBtn { background: #22c55e; color: white; }
+        #startBtn:disabled { background: #64748b; }
+        .entry { margin-bottom: 5px; border-bottom: 1px solid #334155; padding-bottom: 2px; }
+        .success { color: #4ade80; }
+        .error { color: #f87171; }
+    </style>
+</head>
+<body>
+    <h1>Bulk JSON Downloader</h1>
+    <div class="stats" id="stats">Ready to extract JAMB (2005-2025)</div>
+    
+    <div class="controls">
+        <input type="text" id="apiKey" value="f2812cef784d06464971aa62dd81a777e58b1a0dc06e9e4ef3f07722e6ba145f" style="width: 300px; padding: 10px;">
+        <button id="startBtn">START FULL EXTRACTION</button>
+    </div>
+
+    <div class="log" id="log">Logs will appear here...</div>
+
+    <script>
+        const API_KEY = document.getElementById('apiKey').value;
+        const PROXY = "https://corsproxy.io/?";
+        const BASE_URL = "https://api.myquest.com.ng/api/questions";
+        
+        const logEl = document.getElementById('log');
+        const statsEl = document.getElementById('stats');
+        const startBtn = document.getElementById('startBtn');
+
+        let masterData = [];
+
+        function addLog(msg, type = '') {
+            const div = document.createElement('div');
+            div.className = 'entry ' + type;
+            div.innerText = `[${new Date().toLocaleTimeString()}] ${msg}`;
+            logEl.prepend(div);
+        }
+
+        async function apiCall(endpoint, body) {
+            const url = PROXY + encodeURIComponent(BASE_URL + endpoint);
+            try {
+                const res = await fetch(url, {
+                    method: 'POST',
+                    headers: { 'Authorization': `Bearer ${API_KEY}` },
+                    body: JSON.stringify(body)
+                });
+                return await res.json();
+            } catch (e) {
+                return null;
+            }
+        }
+
+        startBtn.addEventListener('click', async () => {
+            startBtn.disabled = true;
+            masterData = [];
+            const years = Array.from({length: 21}, (_, i) => 2005 + i);
+
+            for (let year of years) {
+                statsEl.innerText = `Current Year: ${year} | Collected: ${masterData.length}`;
+                addLog(`Fetching subjects for ${year}...`);
+
+                const subjData = await apiCall('?get=subject', { exam: "JAMB", exam_year_id: year.toString() });
+                
+                if (subjData && subjData.success) {
+                    for (let subject of subjData.data) {
+                        addLog(`  -> Downloading ${subject}...`);
+                        
+                        const qData = await apiCall('', {
+                            exam: "JAMB",
+                            exam_year_id: year.toString(),
+                            subject: subject,
+                            page: 1
+                        });
+
+                        if (qData && qData.success) {
+                            masterData.push({
+                                year: year,
+                                subject: subject,
+                                questions: qData.data.questions
+                            });
+                            addLog(`     ✅ Saved ${subject}`, 'success');
+                        } else {
+                            addLog(`     ❌ Failed ${subject}`, 'error');
+                        }
+                        // Small delay to prevent proxy rate limit
+                        await new Promise(r => setTimeout(r, 1000));
+                    }
+                }
+            }
+
+            // FINAL STEP: DOWNLOAD FILE
+            addLog("Extraction Complete! Downloading JSON...");
+            const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(masterData, null, 4));
+            const downloadAnchorNode = document.createElement('a');
+            downloadAnchorNode.setAttribute("href", dataStr);
+            downloadAnchorNode.setAttribute("download", "JAMB_QUESTIONS_2005_2025.json");
+            document.body.appendChild(downloadAnchorNode);
+            downloadAnchorNode.click();
+            downloadAnchorNode.remove();
+            
+            startBtn.disabled = false;
+            statsEl.innerText = "DONE! Check your downloads folder.";
+        });
+    </script>
+</body>
+</html>
