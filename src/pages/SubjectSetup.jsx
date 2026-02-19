@@ -134,7 +134,10 @@ export const SubjectSetup = ({ subject, onBack, onStartMock }) => {
 
               {/* Start Button */}
               <motion.button
-                onClick={onStartMock}
+                onClick={() => {
+                  sessionStorage.setItem('questionCount', questionCount.toString());
+                  onStartMock();
+                }}
                 className="w-full bg-primary hover:bg-primary/90 text-white font-bold py-4 rounded-xl shadow-lg shadow-primary/20 transition-all flex items-center justify-center gap-2 group"
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
