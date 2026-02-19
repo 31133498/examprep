@@ -35,12 +35,22 @@ function SubjectSetupWrapper() {
   const { examId, subjectId } = useParams();
   const navigate = useNavigate();
 
+  const handleStartMock = () => {
+    // Require login before starting mock exam
+    navigate('/login', { 
+      state: { 
+        exam: examId.toUpperCase(), 
+        returnTo: `/${examId}/${subjectId}/mock` 
+      } 
+    });
+  };
+
   return (
     <div className="bg-background-light dark:bg-background-dark min-h-screen">
       <SubjectSetup 
         subject={subjectId} 
         onBack={() => navigate(`/${examId}`)} 
-        onStartMock={() => navigate(`/${examId}/${subjectId}/mock`)}
+        onStartMock={handleStartMock}
       />
     </div>
   );

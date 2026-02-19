@@ -123,7 +123,6 @@ const ExamHero = () => {
                 variant="primary" 
                 size="lg" 
                 className="shadow-lg shadow-primary/30 hover:-translate-y-1"
-                onClick={() => navigate('/login', { state: { exam: 'ExamPrep', returnTo: '/' } })}
               >
                 Start Learning Now
               </Button>
@@ -197,17 +196,6 @@ const ExamHero = () => {
 };
 
 const ExamGrid = ({ onExamSelect }) => {
-  const navigate = useNavigate();
-  
-  const handleExamClick = (examId) => {
-    // Require login before accessing exam
-    navigate('/login', { 
-      state: { 
-        exam: examId.toUpperCase(), 
-        returnTo: `/${examId}` 
-      } 
-    });
-  };
   
   return (
     <section className="py-16 sm:py-24 bg-white relative">
@@ -457,7 +445,6 @@ const CTASection = () => {
             variant="secondary" 
             size="lg"
             className="bg-white text-primary hover:bg-gray-50 hover:scale-105 shadow-lg"
-            onClick={() => navigate('/login', { state: { exam: 'ExamPrep', returnTo: '/' } })}
           >
             Get Started for Free
           </Button>
