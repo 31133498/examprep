@@ -83,8 +83,15 @@ export function MockExamPage() {
       return acc + (answers[q.id] === q.correct ? 1 : 0);
     }, 0);
     
-    alert(`Exam Submitted!\n\nScore: ${score}/${totalQuestions}\nPercentage: ${((score/totalQuestions)*100).toFixed(1)}%`);
-    navigate(`/${examId}/${subjectId}`);
+    const skipped = totalQuestions - Object.keys(answers).length;
+    const timeTakenSeconds = examTime - timeLeft;
+    const mins = Math.floor(timeTakenSeconds / 60);
+    const secs = timeTakenSeconds % 60;
+    const timeTaken = `${mins}m ${secs}s`;
+    
+    navigate(`/${examId}/${subjectId}/results`, { 
+      state: { score, totalQuestions, timeTaken, skipped, answers, questions } 
+    });
   };
 
   const goToQuestion = (index) => {

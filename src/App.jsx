@@ -4,6 +4,7 @@ import { JAMBLanding } from './pages/JAMBLanding';
 import { SubjectSetup } from './pages/SubjectSetup';
 import { LoginPage } from './pages/LoginPage';
 import { MockExamPage } from './pages/MockExamPage';
+import { ExamResults } from './pages/ExamResults';
 import { subjects } from './data/subjects';
 
 function App() {
@@ -15,6 +16,7 @@ function App() {
         <Route path="/:examId" element={<ExamLandingWrapper />} />
         <Route path="/:examId/:subjectId" element={<SubjectSetupWrapper />} />
         <Route path="/:examId/:subjectId/mock" element={<MockExamPageWrapper />} />
+        <Route path="/:examId/:subjectId/results" element={<ExamResults />} />
       </Routes>
     </BrowserRouter>
   );

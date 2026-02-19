@@ -5,6 +5,15 @@ class QuestionManager {
   constructor() {
     this.questions = null;
     this.usedQuestions = this.loadUsedQuestions();
+    // Map subject slugs to JSON subject names
+    this.subjectMap = {
+      'english': 'Use of English',
+      'mathematics': 'Mathematics',
+      'physics': 'Physics',
+      'biology': 'Biology',
+      'chemistry': 'Chemistry',
+      'economics': 'Economics'
+    };
   }
 
   // Load used questions from localStorage
@@ -23,7 +32,7 @@ class QuestionManager {
     if (this.questions) return this.questions;
     
     try {
-      const response = await fetch('/questionsdata/JAMB_FINAL_PART_2024_2025 (1).json');
+      const response = await fetch('/questionsdata/JAMB_QUESTIONS_2005_2025 (1).json');
       this.questions = await response.json();
       return this.questions;
     } catch (error) {
@@ -33,21 +42,24 @@ class QuestionManager {
   }
 
   // Get questions for a specific subject
-  async getQuestionsForSubject(subjectName, count = 40) {
+  async getQuestionsForSubject(subjectSlug, count = 40) {
     await this.loadQuestions();
     
-    // Find subject data (case-insensitive match)
+    // Map slug to actual subject name in JSON
+    const subjectName = this.subjectMap[subjectSlug.toLowerCase()] || subjectSlug;
+    
+    // Find subject data
     const subjectData = this.questions.find(item => 
-      item.subject.toLowerCase() === subjectName.toLowerCase()
+      item.subject === subjectName
     );
 
     if (!subjectData || !subjectData.questions) {
-      console.error(`No questions found for subject: ${subjectName}`);
+      console.error(`No questions found for subject: ${subjectSlug} (mapped to: ${subjectName})`);
       return [];
     }
 
     const allQuestions = subjectData.questions;
-    const subjectKey = subjectName.toLowerCase();
+    const subjectKey = subjectSlug.toLowerCase();
 
     // Initialize used questions for this subject if not exists
     if (!this.usedQuestions[subjectKey]) {
@@ -61,9 +73,9 @@ class QuestionManager {
 
     // If we don't have enough unused questions, reset the pool
     if (unusedQuestions.length < count) {
-      console.log(`Resetting question pool for ${subjectName}`);
+      console.log(`Resetting question pool for ${subjectSlug}`);
       this.usedQuestions[subjectKey] = [];
-      return this.getQuestionsForSubject(subjectName, count);
+      return this.getQuestionsForSubject(subjectSlug, count);
     }
 
     // Shuffle and select questions
