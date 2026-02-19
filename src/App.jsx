@@ -4,6 +4,7 @@ import { JAMBLanding } from './pages/JAMBLanding';
 import { SubjectSetup } from './pages/SubjectSetup';
 import { LoginPage } from './pages/LoginPage';
 import { MockExamPage } from './pages/MockExamPage';
+import { subjects } from './data/subjects';
 
 function App() {
   return (
@@ -62,6 +63,14 @@ function SubjectSetupWrapper() {
     return null;
   }
 
+  // Find subject by slug
+  const subject = subjects.find(s => s.slug === subjectId);
+  
+  if (!subject) {
+    navigate(`/${examId}`);
+    return null;
+  }
+
   const handleStartMock = () => {
     navigate(`/${examId}/${subjectId}/mock`);
   };
@@ -69,7 +78,7 @@ function SubjectSetupWrapper() {
   return (
     <div className="bg-background-light dark:bg-background-dark min-h-screen">
       <SubjectSetup 
-        subject={subjectId} 
+        subject={subject} 
         onBack={() => navigate(`/${examId}`)} 
         onStartMock={handleStartMock}
       />
