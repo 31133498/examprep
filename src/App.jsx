@@ -50,17 +50,20 @@ function SubjectSetupWrapper() {
   const { examId, subjectId } = useParams();
   const navigate = useNavigate();
 
-  const handleStartMock = () => {
-    // Save mock exam intent
-    sessionStorage.setItem('mockExamIntent', 'true');
-    
-    // Require login before starting mock exam
+  // Check authentication
+  const isAuthenticated = sessionStorage.getItem('isAuthenticated');
+  if (!isAuthenticated) {
     navigate('/login', { 
       state: { 
         exam: examId.toUpperCase(), 
-        returnTo: `/${examId}/${subjectId}/mock` 
+        returnTo: `/${examId}/${subjectId}` 
       } 
     });
+    return null;
+  }
+
+  const handleStartMock = () => {
+    navigate(`/${examId}/${subjectId}/mock`);
   };
 
   return (
