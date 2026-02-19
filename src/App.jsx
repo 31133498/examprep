@@ -22,8 +22,22 @@ function ExamLandingWrapper() {
   const { examId } = useParams();
   const navigate = useNavigate();
 
+  const handleSubjectSelect = (subject) => {
+    // Save subject selection to sessionStorage
+    sessionStorage.setItem('selectedSubject', subject);
+    sessionStorage.setItem('selectedExam', examId);
+    
+    // Require login before accessing subject
+    navigate('/login', { 
+      state: { 
+        exam: examId.toUpperCase(), 
+        returnTo: `/${examId}/${subject}` 
+      } 
+    });
+  };
+
   if (examId === 'jamb') {
-    return <JAMBLanding onSubjectSelect={(subject) => navigate(`/jamb/${subject}`)} onBackToExams={() => navigate('/')} />;
+    return <JAMBLanding onSubjectSelect={handleSubjectSelect} onBackToExams={() => navigate('/')} />;
   }
 
   // For other exams, redirect to home for now
@@ -36,6 +50,9 @@ function SubjectSetupWrapper() {
   const navigate = useNavigate();
 
   const handleStartMock = () => {
+    // Save mock exam intent
+    sessionStorage.setItem('mockExamIntent', 'true');
+    
     // Require login before starting mock exam
     navigate('/login', { 
       state: { 
