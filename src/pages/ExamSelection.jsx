@@ -70,6 +70,8 @@ export const ExamSelection = () => {
 };
 
 const ExamHero = () => {
+  const navigate = useNavigate();
+  
   return (
     <section className="relative overflow-hidden bg-background-light pb-12 pt-10 sm:pt-16 lg:pb-20 lg:pt-24">
       <div className="absolute inset-0 z-0 opacity-30" style={{ backgroundImage: 'radial-gradient(#008550 1px, transparent 1px)', backgroundSize: '32px 32px' }} />
@@ -117,7 +119,12 @@ const ExamHero = () => {
               variants={fadeInUp}
               transition={{ delay: 0.4 }}
             >
-              <Button variant="primary" size="lg" className="shadow-lg shadow-primary/30 hover:-translate-y-1">
+              <Button 
+                variant="primary" 
+                size="lg" 
+                className="shadow-lg shadow-primary/30 hover:-translate-y-1"
+                onClick={() => navigate('/login', { state: { exam: 'ExamPrep', returnTo: '/' } })}
+              >
                 Start Learning Now
               </Button>
               <Button variant="secondary" size="lg">
@@ -190,6 +197,18 @@ const ExamHero = () => {
 };
 
 const ExamGrid = ({ onExamSelect }) => {
+  const navigate = useNavigate();
+  
+  const handleExamClick = (examId) => {
+    // Require login before accessing exam
+    navigate('/login', { 
+      state: { 
+        exam: examId.toUpperCase(), 
+        returnTo: `/${examId}` 
+      } 
+    });
+  };
+  
   return (
     <section className="py-16 sm:py-24 bg-white relative">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
@@ -214,7 +233,7 @@ const ExamGrid = ({ onExamSelect }) => {
             <motion.div key={exam.id} variants={staggerItem}>
               <Card 
                 className="group relative flex flex-col overflow-hidden p-6 transition-all duration-300 hover:shadow-hover hover:-translate-y-1 hover:border-primary/30 cursor-pointer"
-                onClick={() => onExamSelect(exam.id)}
+                onClick={() => handleExamClick(exam.id)}
               >
                 <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-lg bg-primary/10 text-primary group-hover:bg-primary group-hover:text-white transition-colors duration-300">
                   <Icon name={exam.icon} className="text-[28px]" />
@@ -405,6 +424,8 @@ const TestimonialsSection = () => {
 };
 
 const CTASection = () => {
+  const navigate = useNavigate();
+  
   return (
     <section className="bg-primary py-16">
       <div className="mx-auto max-w-4xl px-4 text-center sm:px-6 lg:px-8">
@@ -436,6 +457,7 @@ const CTASection = () => {
             variant="secondary" 
             size="lg"
             className="bg-white text-primary hover:bg-gray-50 hover:scale-105 shadow-lg"
+            onClick={() => navigate('/login', { state: { exam: 'ExamPrep', returnTo: '/' } })}
           >
             Get Started for Free
           </Button>

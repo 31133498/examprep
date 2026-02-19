@@ -2,25 +2,29 @@ import { motion } from 'framer-motion';
 import { Icon } from '../components/ui/Icon';
 import { Button } from '../components/ui/Button';
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 
 export const LoginPage = () => {
   const [isLogin, setIsLogin] = useState(true);
   const [showPassword, setShowPassword] = useState(false);
   const [formData, setFormData] = useState({ identifier: '', password: '', rememberMe: false });
   const navigate = useNavigate();
+  const location = useLocation();
+  
+  // Get exam context from navigation state
+  const examContext = location.state?.exam || 'ExamPrep';
+  const returnTo = location.state?.returnTo || '/';
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // TODO: Implement actual authentication
-    console.log('Form submitted:', formData);
-    navigate('/'); // Redirect to home after login
+    // For development: just navigate without actual auth
+    navigate(returnTo);
   };
 
   return (
     <div className="w-full min-h-screen flex flex-col md:flex-row">
       {/* Left Side: Illustration & Motivation */}
-      <LeftPanel />
+      <LeftPanel examContext={examContext} />
 
       {/* Right Side: Auth Form */}
       <div className="w-full md:w-1/2 flex items-center justify-center p-6 md:p-16 bg-background-light dark:bg-background-dark">
@@ -35,7 +39,7 @@ export const LoginPage = () => {
             <div className="bg-primary p-2 rounded-lg">
               <Icon name="school" className="text-white text-2xl" />
             </div>
-            <span className="text-xl font-bold text-gray-900 dark:text-white">ExamPrep</span>
+            <span className="text-xl font-bold text-gray-900 dark:text-white">{examContext}</span>
           </div>
 
           <div className="mb-10">
@@ -194,7 +198,9 @@ export const LoginPage = () => {
   );
 };
 
-const LeftPanel = () => {
+const LeftPanel = ({ examContext }) => {
+  const examName = examContext === 'ExamPrep' ? 'JAMB' : examContext.toUpperCase();
+  
   return (
     <div className="hidden md:flex md:w-1/2 bg-gradient-to-br from-primary to-[#0d7a32] flex-col justify-between p-12 text-white relative overflow-hidden">
       {/* Decorative Circles */}
@@ -211,10 +217,10 @@ const LeftPanel = () => {
           <div className="bg-white p-2 rounded-lg">
             <Icon name="school" className="text-primary text-3xl" />
           </div>
-          <span className="text-2xl font-bold tracking-tight">ExamPrep</span>
+          <span className="text-2xl font-bold tracking-tight">{examContext}</span>
         </div>
         <h1 className="text-5xl font-extrabold leading-tight mb-6">
-          Ace Your JAMB<br />
+          Ace Your {examName}<br />
           <span className="text-green-200">With Confidence.</span>
         </h1>
         <p className="text-lg text-green-50 max-w-md opacity-90">
