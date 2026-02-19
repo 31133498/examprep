@@ -88,7 +88,7 @@ const SubjectCard = ({ subject, onSelect }) => {
           className="bg-primary hover:bg-primary/90 text-white px-5 py-2.5 rounded-xl text-sm font-bold transition-all shadow-md"
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
-          onClick={() => onSelect && onSelect(subject.id)}
+          onClick={() => onSelect && onSelect(subject.slug)}
         >
           Select
         </motion.button>

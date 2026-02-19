@@ -1,6 +1,7 @@
 export const subjects = [
   {
     id: 1,
+    slug: 'english',
     name: 'Use of English',
     description: 'Compulsory for all JAMB candidates.',
     fullDescription: 'Master concepts from Grammar, Comprehension, and Lexis & Structure. Our adaptive platform simulates the exact JAMB environment to boost your confidence.',
@@ -20,6 +21,7 @@ export const subjects = [
   },
   {
     id: 2,
+    slug: 'mathematics',
     name: 'Mathematics',
     description: 'Calculus, Algebra & Geometry modules.',
     fullDescription: 'Master concepts from Algebra, Geometry, Calculus, and Statistics. Our adaptive platform simulates the exact JAMB environment to boost your confidence.',
@@ -39,6 +41,7 @@ export const subjects = [
   },
   {
     id: 3,
+    slug: 'physics',
     name: 'Physics',
     description: 'Comprehensive mechanics and optics.',
     fullDescription: 'Master concepts from Mechanics, Waves, and Modern Physics. Our adaptive platform simulates the exact JAMB environment to boost your confidence.',
@@ -58,6 +61,7 @@ export const subjects = [
   },
   {
     id: 4,
+    slug: 'biology',
     name: 'Biology',
     description: 'Genetics, Ecology & Anatomy focus.',
     fullDescription: 'Master concepts from Cell Biology, Genetics, Ecology, and Human Anatomy. Our adaptive platform simulates the exact JAMB environment to boost your confidence.',
@@ -77,6 +81,7 @@ export const subjects = [
   },
   {
     id: 5,
+    slug: 'chemistry',
     name: 'Chemistry',
     description: 'Organic, Inorganic & Physical series.',
     fullDescription: 'Master concepts from Organic, Inorganic, and Physical Chemistry. Our adaptive platform simulates the exact JAMB environment to boost your confidence.',
@@ -96,6 +101,7 @@ export const subjects = [
   },
   {
     id: 6,
+    slug: 'economics',
     name: 'Economics',
     description: 'Markets, Finance & National Trade.',
     fullDescription: 'Master concepts from Microeconomics, Macroeconomics, and Development Economics. Our adaptive platform simulates the exact JAMB environment to boost your confidence.',
