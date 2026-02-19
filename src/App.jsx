@@ -72,6 +72,8 @@ function SubjectSetupWrapper() {
   }
 
   const handleStartMock = () => {
+    // Save question count to sessionStorage
+    sessionStorage.setItem('questionCount', questionCount.toString());
     navigate(`/${examId}/${subjectId}/mock`);
   };
 

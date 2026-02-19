@@ -10,7 +10,52 @@ const mockQuestions = {
     { id: 2, text: 'What is the plural of "child"?', options: ['Children', 'Childs', 'Childes', 'Childrens'], correct: 0 },
     { id: 3, text: 'Identify the verb: "The cat sleeps on the mat"', options: ['sleeps', 'cat', 'mat', 'the'], correct: 0 },
     { id: 4, text: 'Which is a synonym for "happy"?', options: ['Joyful', 'Sad', 'Angry', 'Tired'], correct: 0 },
-    { id: 5, text: 'Choose the correct sentence:', options: ['She is taller than me', 'She is more taller than me', 'She is tallest than me', 'She is tall than me'], correct: 0 }
+    { id: 5, text: 'Choose the correct sentence:', options: ['She is taller than me', 'She is more taller than me', 'She is tallest than me', 'She is tall than me'], correct: 0 },
+    { id: 6, text: 'What is an antonym for "difficult"?', options: ['Easy', 'Hard', 'Complex', 'Tough'], correct: 0 },
+    { id: 7, text: 'Identify the noun: "The dog barks loudly"', options: ['dog', 'barks', 'loudly', 'the'], correct: 0 },
+    { id: 8, text: 'Which word is an adjective?', options: ['Beautiful', 'Run', 'Quickly', 'Jump'], correct: 0 },
+    { id: 9, text: 'Choose the correct past tense:', options: ['Went', 'Goed', 'Gone', 'Going'], correct: 0 },
+    { id: 10, text: 'What is a pronoun?', options: ['He', 'Table', 'Run', 'Happy'], correct: 0 },
+    { id: 11, text: 'Identify the adverb: "She sings beautifully"', options: ['beautifully', 'sings', 'she', 'none'], correct: 0 },
+    { id: 12, text: 'Which is a preposition?', options: ['Under', 'Jump', 'Happy', 'Quickly'], correct: 0 },
+    { id: 13, text: 'Choose the correct article:', options: ['An apple', 'A apple', 'The apples', 'Some apple'], correct: 0 },
+    { id: 14, text: 'What is a conjunction?', options: ['And', 'Run', 'Happy', 'Table'], correct: 0 },
+    { id: 15, text: 'Identify the interjection:', options: ['Wow!', 'Run', 'Happy', 'Table'], correct: 0 },
+    { id: 16, text: 'Which sentence is in passive voice?', options: ['The ball was thrown', 'He throws the ball', 'She is throwing', 'They throw'], correct: 0 },
+    { id: 17, text: 'What is a compound word?', options: ['Sunflower', 'Sun', 'Flower', 'Light'], correct: 0 },
+    { id: 18, text: 'Choose the correct comparative:', options: ['Better', 'More good', 'Gooder', 'Best'], correct: 0 },
+    { id: 19, text: 'What is a homophone of "there"?', options: ['Their', 'Where', 'Here', 'Were'], correct: 0 },
+    { id: 20, text: 'Identify the subject: "The cat sleeps"', options: ['cat', 'sleeps', 'the', 'none'], correct: 0 },
+    { id: 21, text: 'Which is a proper noun?', options: ['London', 'city', 'country', 'place'], correct: 0 },
+    { id: 22, text: 'Choose the correct superlative:', options: ['Fastest', 'More fast', 'Faster', 'Most fast'], correct: 0 },
+    { id: 23, text: 'What is a collective noun?', options: ['Team', 'Player', 'Game', 'Ball'], correct: 0 },
+    { id: 24, text: 'Identify the object: "She reads books"', options: ['books', 'reads', 'she', 'none'], correct: 0 },
+    { id: 25, text: 'Which is an abstract noun?', options: ['Love', 'Table', 'Chair', 'Book'], correct: 0 },
+    { id: 26, text: 'Choose the correct possessive:', options: ['John\'s', 'Johns', 'Johns\'', 'John'], correct: 0 },
+    { id: 27, text: 'What is a gerund?', options: ['Swimming', 'Swim', 'Swam', 'Swims'], correct: 0 },
+    { id: 28, text: 'Identify the infinitive:', options: ['To run', 'Running', 'Ran', 'Runs'], correct: 0 },
+    { id: 29, text: 'Which is a modal verb?', options: ['Can', 'Run', 'Jump', 'Walk'], correct: 0 },
+    { id: 30, text: 'Choose the correct tense: "I ___ there yesterday"', options: ['was', 'am', 'will be', 'have been'], correct: 0 },
+    { id: 31, text: 'What is a clause?', options: ['A group of words with subject and verb', 'A single word', 'A phrase', 'A sentence'], correct: 0 },
+    { id: 32, text: 'Identify the phrase: "in the morning"', options: ['Prepositional phrase', 'Noun phrase', 'Verb phrase', 'Adjective phrase'], correct: 0 },
+    { id: 33, text: 'Which is a linking verb?', options: ['Is', 'Run', 'Jump', 'Eat'], correct: 0 },
+    { id: 34, text: 'Choose the correct form: "Neither John ___ Mary"', options: ['nor', 'or', 'and', 'but'], correct: 0 },
+    { id: 35, text: 'What is an idiom?', options: ['A phrase with figurative meaning', 'A literal phrase', 'A word', 'A sentence'], correct: 0 },
+    { id: 36, text: 'Identify the metaphor:', options: ['Time is money', 'He runs fast', 'She is tall', 'The sky is blue'], correct: 0 },
+    { id: 37, text: 'Which is a simile?', options: ['As brave as a lion', 'He is brave', 'She runs', 'They jump'], correct: 0 },
+    { id: 38, text: 'Choose the correct punctuation:', options: ['Hello, how are you?', 'Hello how are you', 'Hello; how are you', 'Hello: how are you'], correct: 0 },
+    { id: 39, text: 'What is alliteration?', options: ['Repetition of initial sounds', 'Rhyming words', 'Similar meanings', 'Opposite meanings'], correct: 0 },
+    { id: 40, text: 'Identify the onomatopoeia:', options: ['Buzz', 'Run', 'Happy', 'Table'], correct: 0 },
+    { id: 41, text: 'Which is personification?', options: ['The wind whispered', 'The wind blew', 'It was windy', 'Wind is air'], correct: 0 },
+    { id: 42, text: 'Choose the correct spelling:', options: ['Definitely', 'Definately', 'Definetly', 'Definitly'], correct: 0 },
+    { id: 43, text: 'What is hyperbole?', options: ['Exaggeration', 'Understatement', 'Literal meaning', 'Comparison'], correct: 0 },
+    { id: 44, text: 'Identify the oxymoron:', options: ['Bittersweet', 'Sweet', 'Bitter', 'Sour'], correct: 0 },
+    { id: 45, text: 'Which is a palindrome?', options: ['Racecar', 'Car', 'Race', 'Speed'], correct: 0 },
+    { id: 46, text: 'Choose the correct prefix:', options: ['Unhappy', 'Happyun', 'Happyness', 'Happier'], correct: 0 },
+    { id: 47, text: 'What is a suffix?', options: ['Letters added at the end', 'Letters at the start', 'Middle letters', 'All letters'], correct: 0 },
+    { id: 48, text: 'Identify the root word in "unhappiness":', options: ['happy', 'unhappy', 'happiness', 'ness'], correct: 0 },
+    { id: 49, text: 'Which is a synonym for "big"?', options: ['Large', 'Small', 'Tiny', 'Little'], correct: 0 },
+    { id: 50, text: 'Choose the correct contraction:', options: ['Don\'t', 'Dont', 'Do\'nt', 'Donot'], correct: 0 }
   ],
   mathematics: [
     { id: 1, text: 'What is 15% of 200?', options: ['30', '25', '35', '20'], correct: 0 },
@@ -63,10 +108,17 @@ export function MockExamPage() {
   const { examId, subjectId } = useParams();
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [answers, setAnswers] = useState({});
-  const [timeLeft, setTimeLeft] = useState(45 * 60);
+  
+  // Get question count from sessionStorage (default 40)
+  const questionCount = parseInt(sessionStorage.getItem('questionCount') || '40');
+  // Calculate time: questionCount * 1.125 minutes converted to seconds
+  const examTime = Math.floor(questionCount * 1.125 * 60);
+  const [timeLeft, setTimeLeft] = useState(examTime);
   const [showSubmitModal, setShowSubmitModal] = useState(false);
 
-  const questions = mockQuestions[subjectId] || mockQuestions.biology;
+  const allQuestions = mockQuestions[subjectId] || mockQuestions.biology;
+  // Limit questions to selected count
+  const questions = allQuestions.slice(0, questionCount);
   const totalQuestions = questions.length;
   const answeredCount = Object.keys(answers).length;
   const progress = (answeredCount / totalQuestions) * 100;
