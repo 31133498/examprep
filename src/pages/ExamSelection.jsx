@@ -221,7 +221,7 @@ const ExamGrid = ({ onExamSelect }) => {
             <motion.div key={exam.id} variants={staggerItem}>
               <Card 
                 className="group relative flex flex-col overflow-hidden p-6 transition-all duration-300 hover:shadow-hover hover:-translate-y-1 hover:border-primary/30 cursor-pointer"
-                onClick={() => handleExamClick(exam.id)}
+                onClick={() => onExamSelect(exam.id)}
               >
                 <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-lg bg-primary/10 text-primary group-hover:bg-primary group-hover:text-white transition-colors duration-300">
                   <Icon name={exam.icon} className="text-[28px]" />
