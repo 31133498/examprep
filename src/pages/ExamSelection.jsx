@@ -1,4 +1,5 @@
 import { motion } from 'framer-motion';
+import { useNavigate } from 'react-router-dom';
 import { Navigation } from '../components/sections/Navigation';
 import { Footer } from '../components/sections/Footer';
 import { Button } from '../components/ui/Button';
@@ -52,12 +53,14 @@ const examData = [
   }
 ];
 
-export const ExamSelection = ({ onExamSelect }) => {
+export const ExamSelection = () => {
+  const navigate = useNavigate();
+
   return (
     <div className="min-h-screen bg-background-light">
       <Navigation />
       <ExamHero />
-      <ExamGrid onExamSelect={onExamSelect} />
+      <ExamGrid onExamSelect={(examId) => navigate(`/${examId}`)} />
       <FeaturesSection />
       <TestimonialsSection />
       <CTASection />

@@ -1,75 +1,67 @@
+import { BrowserRouter, Routes, Route, useNavigate, useParams } from 'react-router-dom';
 import { ExamSelection } from './pages/ExamSelection';
 import { JAMBLanding } from './pages/JAMBLanding';
 import { SubjectSetup } from './pages/SubjectSetup';
-import { Navigation } from './components/sections/Navigation';
-import { Button } from './components/ui/Button';
-import { Icon } from './components/ui/Icon';
-import { useState } from 'react';
-import { motion } from 'framer-motion';
 
 function App() {
-  const [currentView, setCurrentView] = useState('home'); // 'home' | 'exam' | 'subject'
-  const [selectedExam, setSelectedExam] = useState(null);
-  const [selectedSubject, setSelectedSubject] = useState(null);
+  return (
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<ExamSelection />} />
+        <Route path="/:examId" element={<ExamLandingWrapper />} />
+        <Route path="/:examId/:subjectId" element={<SubjectSetupWrapper />} />
+        <Route path="/:examId/:subjectId/mock" element={<MockExamPage />} />
+      </Routes>
+    </BrowserRouter>
+  );
+}
 
-  const handleExamSelect = (examId) => {
-    setSelectedExam(examId);
-    setCurrentView('exam');
-  };
+function ExamLandingWrapper() {
+  const { examId } = useParams();
+  const navigate = useNavigate();
 
-  const handleSubjectSelect = (subject) => {
-    setSelectedSubject(subject);
-    setCurrentView('subject');
-  };
-
-  const handleBackToExams = () => {
-    setSelectedExam(null);
-    setCurrentView('home');
-  };
-
-  const handleBackToJAMB = () => {
-    setSelectedSubject(null);
-    setCurrentView('exam');
-  };
-
-  // Level 3: Subject Setup Page
-  if (currentView === 'subject' && selectedSubject) {
-    return (
-      <div className="bg-background-light dark:bg-background-dark">
-        <Navigation />
-        <motion.div 
-          className="fixed top-20 left-4 z-40"
-          initial={{ opacity: 0, x: -20 }}
-          animate={{ opacity: 1, x: 0 }}
-        >
-          <Button 
-            variant="secondary" 
-            onClick={handleBackToJAMB}
-            className="shadow-lg backdrop-blur-sm bg-white/90 dark:bg-slate-800/90"
-          >
-            <Icon name="arrow_back" size="sm" />
-            Back to Subjects
-          </Button>
-        </motion.div>
-        <div className="py-8">
-          <SubjectSetup subject={selectedSubject} />
-        </div>
-      </div>
-    );
+  if (examId === 'jamb') {
+    return <JAMBLanding onSubjectSelect={(subject) => navigate(`/jamb/${subject}`)} onBackToExams={() => navigate('/')} />;
   }
 
-  // Level 2: JAMB Landing Page (only JAMB for now, expandable for other exams)
-  if (currentView === 'exam' && selectedExam === 'jamb') {
-    return (
-      <JAMBLanding 
-        onSubjectSelect={handleSubjectSelect}
-        onBackToExams={handleBackToExams}
+  // For other exams, redirect to home for now
+  navigate('/');
+  return null;
+}
+
+function SubjectSetupWrapper() {
+  const { examId, subjectId } = useParams();
+  const navigate = useNavigate();
+
+  return (
+    <div className="bg-background-light dark:bg-background-dark min-h-screen">
+      <SubjectSetup 
+        subject={subjectId} 
+        onBack={() => navigate(`/${examId}`)} 
+        onStartMock={() => navigate(`/${examId}/${subjectId}/mock`)}
       />
-    );
-  }
+    </div>
+  );
+}
 
-  // Level 1: Exam Selection (Home)
-  return <ExamSelection onExamSelect={handleExamSelect} />;
+function MockExamPage() {
+  const { examId, subjectId } = useParams();
+  const navigate = useNavigate();
+
+  return (
+    <div className="min-h-screen bg-white dark:bg-slate-900 flex items-center justify-center">
+      <div className="text-center">
+        <h1 className="text-4xl font-bold mb-4">Mock Exam: {subjectId}</h1>
+        <p className="text-gray-600 mb-8">Exam: {examId.toUpperCase()}</p>
+        <button 
+          onClick={() => navigate(`/${examId}/${subjectId}`)} 
+          className="bg-primary text-white px-6 py-3 rounded-lg font-bold hover:bg-primary-dark"
+        >
+          Back to Setup
+        </button>
+      </div>
+    </div>
+  );
 }
 
 export default App;

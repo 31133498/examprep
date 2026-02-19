@@ -11,8 +11,11 @@ import { Footer } from '../components/sections/Footer';
 import { Button } from '../components/ui/Button';
 import { Icon } from '../components/ui/Icon';
 import { motion } from 'framer-motion';
+import { useNavigate } from 'react-router-dom';
 
 export const JAMBLanding = ({ onSubjectSelect, onBackToExams }) => {
+  const navigate = useNavigate();
+
   return (
     <div className="min-h-screen bg-white dark:bg-slate-900">
       <Navigation />

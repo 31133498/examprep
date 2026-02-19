@@ -1,12 +1,35 @@
 import { motion } from 'framer-motion';
 import { Icon } from '../components/ui/Icon';
+import { Button } from '../components/ui/Button';
+import { Navigation } from '../components/sections/Navigation';
 import { useState } from 'react';
 
-export const SubjectSetup = ({ subject }) => {
+export const SubjectSetup = ({ subject, onBack, onStartMock }) => {
   const [questionCount, setQuestionCount] = useState(40);
 
   return (
     <div className="min-h-screen bg-background-light dark:bg-background-dark">
+      <Navigation />
+      
+      {/* Back Button */}
+      {onBack && (
+        <motion.div 
+          className="fixed top-20 left-4 z-40"
+          initial={{ opacity: 0, x: -20 }}
+          animate={{ opacity: 1, x: 0 }}
+        >
+          <Button 
+            variant="secondary" 
+            onClick={onBack}
+            className="shadow-lg backdrop-blur-sm bg-white/90 dark:bg-slate-800/90"
+          >
+            <Icon name="arrow_back" size="sm" />
+            Back to Subjects
+          </Button>
+        </motion.div>
+      )}
+
+      <div className="py-8">
       {/* Hero Section */}
       <section className="mb-8 flex flex-col md:flex-row items-center gap-6 bg-white dark:bg-white/5 p-8 rounded-xl border border-primary/5 shadow-sm max-w-7xl mx-auto">
         <div className={`${subject.iconBg} p-6 rounded-2xl`}>
@@ -111,6 +134,7 @@ export const SubjectSetup = ({ subject }) => {
 
               {/* Start Button */}
               <motion.button
+                onClick={onStartMock}
                 className="w-full bg-primary hover:bg-primary/90 text-white font-bold py-4 rounded-xl shadow-lg shadow-primary/20 transition-all flex items-center justify-center gap-2 group"
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
@@ -164,6 +188,7 @@ export const SubjectSetup = ({ subject }) => {
           </div>
         </div>
       </footer>
+      </div>
     </div>
   );
 };
