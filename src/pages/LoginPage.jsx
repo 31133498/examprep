@@ -17,7 +17,19 @@ export const LoginPage = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // For development: just navigate without actual auth
+    
+    // Simulate backend login - save user data
+    const userData = {
+      name: formData.identifier.split('@')[0] || 'Student',
+      email: formData.identifier,
+      loginTime: new Date().toISOString()
+    };
+    
+    // Save to sessionStorage (simulating backend session)
+    sessionStorage.setItem('user', JSON.stringify(userData));
+    sessionStorage.setItem('isAuthenticated', 'true');
+    
+    // Navigate to intended destination
     navigate(returnTo);
   };
 

@@ -3,6 +3,7 @@ import { ExamSelection } from './pages/ExamSelection';
 import { JAMBLanding } from './pages/JAMBLanding';
 import { SubjectSetup } from './pages/SubjectSetup';
 import { LoginPage } from './pages/LoginPage';
+import { MockExamPage } from './pages/MockExamPage';
 
 function App() {
   return (
@@ -12,7 +13,7 @@ function App() {
         <Route path="/login" element={<LoginPage />} />
         <Route path="/:examId" element={<ExamLandingWrapper />} />
         <Route path="/:examId/:subjectId" element={<SubjectSetupWrapper />} />
-        <Route path="/:examId/:subjectId/mock" element={<MockExamPage />} />
+        <Route path="/:examId/:subjectId/mock" element={<MockExamPageWrapper />} />
       </Routes>
     </BrowserRouter>
   );
@@ -73,24 +74,8 @@ function SubjectSetupWrapper() {
   );
 }
 
-function MockExamPage() {
-  const { examId, subjectId } = useParams();
-  const navigate = useNavigate();
-
-  return (
-    <div className="min-h-screen bg-white dark:bg-slate-900 flex items-center justify-center">
-      <div className="text-center">
-        <h1 className="text-4xl font-bold mb-4">Mock Exam: {subjectId}</h1>
-        <p className="text-gray-600 mb-8">Exam: {examId.toUpperCase()}</p>
-        <button 
-          onClick={() => navigate(`/${examId}/${subjectId}`)} 
-          className="bg-primary text-white px-6 py-3 rounded-lg font-bold hover:bg-primary-dark"
-        >
-          Back to Setup
-        </button>
-      </div>
-    </div>
-  );
+function MockExamPageWrapper() {
+  return <MockExamPage />;
 }
 
 export default App;
