@@ -2,12 +2,14 @@ import { BrowserRouter, Routes, Route, useNavigate, useParams } from 'react-rout
 import { ExamSelection } from './pages/ExamSelection';
 import { JAMBLanding } from './pages/JAMBLanding';
 import { SubjectSetup } from './pages/SubjectSetup';
+import { LoginPage } from './pages/LoginPage';
 
 function App() {
   return (
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<ExamSelection />} />
+        <Route path="/login" element={<LoginPage />} />
         <Route path="/:examId" element={<ExamLandingWrapper />} />
         <Route path="/:examId/:subjectId" element={<SubjectSetupWrapper />} />
         <Route path="/:examId/:subjectId/mock" element={<MockExamPage />} />

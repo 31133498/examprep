@@ -1,7 +1,9 @@
 import { Button } from '../ui/Button';
 import { Icon } from '../ui/Icon';
+import { useNavigate } from 'react-router-dom';
 
 export const Navigation = () => {
+  const navigate = useNavigate();
   return (
     <nav className="sticky top-0 z-50 bg-white/80 dark:bg-background-dark/80 backdrop-blur-md border-b border-primary/10">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -23,8 +25,8 @@ export const Navigation = () => {
           </div>
           
           <div className="flex items-center gap-4">
-            <Button variant="ghost" className="hidden sm:block">Login</Button>
-            <Button variant="primary">Get Started</Button>
+            <Button variant="ghost" className="hidden sm:block" onClick={() => navigate('/login')}>Login</Button>
+            <Button variant="primary" onClick={() => navigate('/login')}>Get Started</Button>
           </div>
         </div>
       </div>
