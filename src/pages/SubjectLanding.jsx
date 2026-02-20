@@ -77,23 +77,14 @@ export const SubjectLanding = ({ subject, onBack, onStartPractice }) => {
                 <StatCard icon="trending_up" label="Avg Score" value={`${subject.avgScore}%`} />
               </div>
 
-              {/* CTA Buttons */}
-              <div className="flex flex-wrap gap-4">
-                <Button
-                  onClick={onStartPractice}
-                  className="bg-primary hover:bg-primary/90 text-white font-bold py-4 px-8 rounded-xl shadow-lg shadow-primary/30 hover:shadow-primary/40 hover:-translate-y-1 transition-all flex items-center gap-2 group"
-                >
-                  Start Practice Now
-                  <Icon name="arrow_forward" className="group-hover:translate-x-1 transition-transform" />
-                </Button>
-                <Button
-                  variant="secondary"
-                  className="py-4 px-8 rounded-xl font-semibold"
-                >
-                  <Icon name="play_circle" size="sm" />
-                  Watch Tutorial
-                </Button>
-              </div>
+              {/* CTA Button */}
+              <Button
+                onClick={onStartPractice}
+                className="bg-primary hover:bg-primary/90 text-white font-bold py-4 px-8 rounded-xl shadow-lg shadow-primary/30 hover:shadow-primary/40 hover:-translate-y-1 transition-all flex items-center gap-2 group"
+              >
+                Start Practice Now
+                <Icon name="arrow_forward" className="group-hover:translate-x-1 transition-transform" />
+              </Button>
             </motion.div>
 
             {/* Right: Visual Card */}
