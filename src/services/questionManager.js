@@ -48,17 +48,29 @@ class QuestionManager {
     // Map slug to actual subject name in JSON
     const subjectName = this.subjectMap[subjectSlug.toLowerCase()] || subjectSlug;
     
-    // Find subject data
-    const subjectData = this.questions.find(item => 
+    // Find ALL entries for this subject (across all years)
+    const subjectEntries = this.questions.filter(item => 
       item.subject === subjectName
     );
 
-    if (!subjectData || !subjectData.questions) {
+    if (!subjectEntries.length) {
       console.error(`No questions found for subject: ${subjectSlug} (mapped to: ${subjectName})`);
       return [];
     }
 
-    const allQuestions = subjectData.questions;
+    // Combine all questions from all years
+    const allQuestions = [];
+    subjectEntries.forEach(entry => {
+      if (entry.questions && Array.isArray(entry.questions)) {
+        allQuestions.push(...entry.questions);
+      }
+    });
+
+    if (!allQuestions.length) {
+      console.error(`No questions array found for subject: ${subjectName}`);
+      return [];
+    }
+
     const subjectKey = subjectSlug.toLowerCase();
 
     // Initialize used questions for this subject if not exists
