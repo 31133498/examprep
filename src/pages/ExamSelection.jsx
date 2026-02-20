@@ -8,6 +8,9 @@ import { Icon } from '../components/ui/Icon';
 import { Card } from '../components/ui/Card';
 import { PageLoader } from '../components/ui/PageLoader';
 import { fadeInUp, slideInLeft, slideInRight, staggerContainer, staggerItem } from '../utils/animations';
+import ChineduImg from '../images/Chinedu.png';
+import AminaImg from '../images/Amina.png';
+import DavidImg from '../images/David.png';
 
 const examData = [
   {
@@ -361,21 +364,21 @@ const TestimonialsSection = () => {
       name: 'Chinedu O.',
       score: 'JAMB Score: 310',
       quote: 'I was struggling with Physics until I found ExamPrep. The explanations are so clear. I scored 310 in JAMB!',
-      image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuA-lTACvfUG2F_mXOomB4XHgDZx38mM4CadX-jZdKaCxk5hAyaf3TFap-MP0DAUb1lRJjGEEt5bS6Nky8CCo1tGGm8fZxXw9A3RoiiHYKVPPrJTDKb482Dr8Woj062YNlO5r7kIxYkq2NyFzZdg9vZKOH5Bq4MFaNe015vtjrB8DIJI5j8Yu-x80DRPZOgHOSG34gbJ0yBDFAHdDbeb7NeGHQT39EPGQOjsG9MFmVgBH_eICR6CiAeSowgiArlwDPlq2roAlxkR40U',
+      image: ChineduImg,
       featured: false
     },
     {
       name: 'Amina Y.',
       score: 'WAEC: 7 Distinctions',
       quote: 'The CBT practice interface is exactly like the real exam. It helped me manage my time perfectly during the actual test.',
-      image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuC9WlWroKJfre_NVPTsRwWK2UN3DBhA7hxzZPNNYU1jEibBhFMFKByzyw59xH1gpOGdzEIFEEGzKvhHmIMLBh_CFqiFPZn0mVnag3zTpVn9LiCU-Tz0grgpFZorLTLRWh6oMSM24T0Kx1IV2OemViTgTKPOKuVTLsKyJifXbfeaiZffiiIyLRdJ6HIbbnl9Tnazk5DAlKWw9l1oKczNRyNbvwr8s5RKk8ui0WYQg-kGlP7auScFkyGKKIqzADuk4jadryJxqCed608',
+      image: AminaImg,
       featured: true
     },
     {
       name: 'David K.',
       score: 'Admitted to UNILAG',
       quote: 'Post-UTME was a breeze thanks to the university-specific questions. Highly recommended for every student.',
-      image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuBvJ4_HXJmzRQapuxpDDkQb-vEtGx2pbtUz-Bw88gX_iS8nfgF_ejDYhadZk-dJpYdFPsUahQ_j_uGP8go0a2Z3r2ak8v89guZPmGMUIVM6Qh8J3KtdjUtj626oWdE1rWC-G2zJ5Ft899SOEEf-0gJUhCk8ws1q8Zukwaooe9HRCAxUGnwS5ugdX6Uh04jh2REc1My7y78PM6XLuRsWe3XsDopasNa-dQeMB3H8EMhkg25NvwMnSpk6PPUcrbwE5GyNARLwJKc6mS4',
+      image: DavidImg,
       featured: false
     }
   ];

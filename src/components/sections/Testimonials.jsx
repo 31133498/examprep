@@ -1,4 +1,6 @@
 import { Icon } from '../ui/Icon';
+import ChineduImg from '../../images/Chinedu.png';
+import AminaImg from '../../images/Amina.png';
 
 export const Testimonials = () => {
   const testimonials = [
@@ -6,13 +8,13 @@ export const Testimonials = () => {
       quote: "The mock tests were almost identical to the actual exam. I scored 310 in my JAMB thanks to the consistent practice here!",
       name: "Chinelo Adebayo",
       school: "UNILAG Aspirant",
-      image: "https://lh3.googleusercontent.com/aida-public/AB6AXuBCdBLBmrPGbeWiUn3TO9bRjf0IKkNhyuEqYnLU3wsBsNDgw2vYKQKdKXydS8jsA_bub7rk93ilu1q4dkxSNCxtiJ44O-bst4YFo38G48j8CXMd9o9HxbIbUPUM2BpabqbmmQh21EjCgQgNtpxahl9yt2COklc66K9FKHo_mUXFTL7hP5tCy9Q7nwpmsXpj5iI8nehTn5byEvnxE0y-MgH56yzx0huOrJ3hC6pVl5ijzEFrcDDe0zecy1Z_cbc74GDzgShNc8OJXn8r",
+      image: ChineduImg,
     },
     {
       quote: "The analytics really helped me identify that my physics calculations were weak. I worked on them and saw my score jump from 210 to 285.",
       name: "Tunde Ibrahim",
       school: "UI Aspirant",
-      image: "https://lh3.googleusercontent.com/aida-public/AB6AXuBqTrFr1LjaTsQZR6RZA4_7RE4B8BkO_YJFrPmBzORabz1X9bF8rf5vY0kib9-MSOw01ar3AzswzvWBv_sIgpKrCVRdGFHG83z9mU-PIjHpmL5KanjHOM-n0TsmrkBqzxDbr-EldJ4J1XRZpziNyLixJgBjIl85DgrjkBwq6HMF1redJwKxr5jEFFPOSq8kg2qa6ez3Kq_pE53Mb8Sy-ompIW62BG4vQSbim-vjlZIG8BrSrEh7uwPUlakrX1yFT45XOnKaslHpijDm",
+      image: AminaImg,
     },
   ];
   
