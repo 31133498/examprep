@@ -13,10 +13,11 @@ export function MockExamPage() {
   const [answers, setAnswers] = useState({});
   const [isLoading, setIsLoading] = useState(true);
   const [questions, setQuestions] = useState([]);
+  const [replacedQuestions, setReplacedQuestions] = useState(new Set());
+  const [cheatingAttempts, setCheatingAttempts] = useState(0);
+  const [showCheatingWarning, setShowCheatingWarning] = useState(false);
   
-  // Get question count from sessionStorage (default 40)
   const questionCount = parseInt(sessionStorage.getItem('questionCount') || '40');
-  // Calculate time: questionCount * 1.125 minutes converted to seconds
   const examTime = Math.floor(questionCount * 1.125 * 60);
   const [timeLeft, setTimeLeft] = useState(examTime);
   const [showSubmitModal, setShowSubmitModal] = useState(false);
@@ -25,14 +26,51 @@ export function MockExamPage() {
   const answeredCount = Object.keys(answers).length;
   const progress = (answeredCount / totalQuestions) * 100;
 
+  // Anti-cheating: Detect tab/window switch
   useEffect(() => {
-    // Load questions from database
+    const handleVisibilityChange = async () => {
+      if (document.hidden && questions.length > 0 && !isLoading) {
+        const currentQuestionId = questions[currentQuestion]?.id;
+        
+        if (currentQuestionId && !replacedQuestions.has(currentQuestionId)) {
+          setReplacedQuestions(prev => new Set([...prev, currentQuestionId]));
+          
+          setAnswers(prev => {
+            const newAnswers = { ...prev };
+            delete newAnswers[currentQuestionId];
+            return newAnswers;
+          });
+          
+          try {
+            const newQuestions = await questionManager.getQuestionsForSubject(subjectId, 1);
+            if (newQuestions.length > 0) {
+              setQuestions(prev => {
+                const updated = [...prev];
+                updated[currentQuestion] = newQuestions[0];
+                return updated;
+              });
+            }
+          } catch (error) {
+            console.error('Error replacing question:', error);
+          }
+          
+          setCheatingAttempts(prev => prev + 1);
+          setShowCheatingWarning(true);
+          setTimeout(() => setShowCheatingWarning(false), 5000);
+        }
+      }
+    };
+
+    document.addEventListener('visibilitychange', handleVisibilityChange);
+    return () => document.removeEventListener('visibilitychange', handleVisibilityChange);
+  }, [questions, currentQuestion, isLoading, replacedQuestions, subjectId]);
+
+  useEffect(() => {
     const loadQuestions = async () => {
       try {
         const loadedQuestions = await questionManager.getQuestionsForSubject(subjectId, questionCount);
         setQuestions(loadedQuestions);
         
-        // Show loading screen for 2 seconds
         setTimeout(() => {
           setIsLoading(false);
         }, 2000);
@@ -84,7 +122,7 @@ export function MockExamPage() {
     const timeTaken = `${mins}m ${secs}s`;
     
     navigate(`/${examId}/${subjectId}/results`, { 
-      state: { score, totalQuestions, timeTaken, skipped, answers, questions } 
+      state: { score, totalQuestions, timeTaken, skipped, answers, questions, cheatingAttempts } 
     });
   };
 
@@ -100,7 +138,23 @@ export function MockExamPage() {
 
   return (
     <div className="min-h-screen bg-background-light dark:bg-background-dark flex flex-col">
-      {/* Progress Bar */}
+      <AnimatePresence>
+        {showCheatingWarning && (
+          <motion.div
+            initial={{ opacity: 0, y: -100 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -100 }}
+            className="fixed top-20 left-1/2 -translate-x-1/2 z-[70] bg-red-600 text-white px-8 py-4 rounded-xl shadow-2xl flex items-center gap-3 max-w-md"
+          >
+            <Icon name="warning" className="text-3xl" />
+            <div>
+              <p className="font-bold text-lg">Tab Switch Detected!</p>
+              <p className="text-sm">Question replaced. You cannot answer the previous question.</p>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
       <div className="fixed top-0 left-0 w-full h-1.5 bg-primary/10 z-[60]">
         <motion.div 
           className="h-full bg-primary transition-all duration-500"
@@ -109,7 +163,6 @@ export function MockExamPage() {
         />
       </div>
 
-      {/* Header */}
       <header className="sticky top-0 z-50 bg-white/80 dark:bg-background-dark/80 backdrop-blur-md border-b border-primary/10 px-6 py-4">
         <div className="max-w-7xl mx-auto flex items-center justify-between">
           <div className="flex items-center gap-2">
@@ -139,6 +192,18 @@ export function MockExamPage() {
                 {answeredCount} <span className="text-slate-400 font-normal">/ {totalQuestions}</span>
               </div>
             </div>
+
+            {cheatingAttempts > 0 && (
+              <>
+                <div className="h-10 w-[1px] bg-slate-200 dark:bg-slate-700 hidden sm:block" />
+                <div className="hidden sm:flex flex-col items-center">
+                  <span className="text-xs font-medium text-red-400 uppercase tracking-tighter">Tab Switches</span>
+                  <div className="text-red-600 font-bold text-2xl">
+                    {cheatingAttempts}
+                  </div>
+                </div>
+              </>
+            )}
           </div>
 
           <Button 
@@ -151,7 +216,6 @@ export function MockExamPage() {
         </div>
       </header>
 
-      {/* Main Exam Area */}
       <main className="flex-grow flex items-center justify-center p-6">
         <AnimatePresence mode="wait">
           <motion.div
@@ -212,7 +276,6 @@ export function MockExamPage() {
         </AnimatePresence>
       </main>
 
-      {/* Bottom Navigation */}
       <footer className="sticky bottom-0 bg-white dark:bg-slate-900 border-t border-slate-100 dark:border-slate-800 p-4 shadow-2xl">
         <div className="max-w-7xl mx-auto flex items-center justify-between">
           <Button
@@ -242,7 +305,6 @@ export function MockExamPage() {
         </div>
       </footer>
 
-      {/* Live Session Widget */}
       <div className="fixed right-6 bottom-24 hidden lg:block">
         <motion.div 
           initial={{ opacity: 0, y: 20 }}
@@ -259,7 +321,6 @@ export function MockExamPage() {
         </motion.div>
       </div>
 
-      {/* Submit Modal */}
       {showSubmitModal && (
         <div className="fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center z-50 p-4">
           <motion.div 
