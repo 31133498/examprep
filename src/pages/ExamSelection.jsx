@@ -1,12 +1,13 @@
 import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
+import { useState, useEffect } from 'react';
 import { Navigation } from '../components/sections/Navigation';
 import { Footer } from '../components/sections/Footer';
 import { Button } from '../components/ui/Button';
 import { Icon } from '../components/ui/Icon';
 import { Card } from '../components/ui/Card';
+import { PageLoader } from '../components/ui/PageLoader';
 import { fadeInUp, slideInLeft, slideInRight, staggerContainer, staggerItem } from '../utils/animations';
-import { useState } from 'react';
 
 const examData = [
   {
@@ -55,12 +56,25 @@ const examData = [
 
 export const ExamSelection = () => {
   const navigate = useNavigate();
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const timer = setTimeout(() => setLoading(false), 600);
+    return () => clearTimeout(timer);
+  }, []);
+
+  const handleExamSelect = (examId) => {
+    setLoading(true);
+    setTimeout(() => navigate(`/${examId}`), 500);
+  };
+
+  if (loading) return <PageLoader message="Welcome to ExamPrep..." />;
 
   return (
     <div className="min-h-screen bg-background-light">
       <Navigation />
       <ExamHero />
-      <ExamGrid onExamSelect={(examId) => navigate(`/${examId}`)} />
+      <ExamGrid onExamSelect={handleExamSelect} />
       <FeaturesSection />
       <TestimonialsSection />
       <CTASection />

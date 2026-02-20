@@ -1,10 +1,12 @@
 import { BrowserRouter, Routes, Route, useNavigate, useParams } from 'react-router-dom';
+import { useState, useEffect } from 'react';
 import { ExamSelection } from './pages/ExamSelection';
 import { JAMBLanding } from './pages/JAMBLanding';
 import { SubjectSetup } from './pages/SubjectSetup';
 import { LoginPage } from './pages/LoginPage';
 import { MockExamPage } from './pages/MockExamPage';
 import { ExamResults } from './pages/ExamResults';
+import { PageLoader } from './components/ui/PageLoader';
 import { subjects } from './data/subjects';
 
 function App() {
@@ -25,26 +27,34 @@ function App() {
 function ExamLandingWrapper() {
   const { examId } = useParams();
   const navigate = useNavigate();
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const timer = setTimeout(() => setLoading(false), 800);
+    return () => clearTimeout(timer);
+  }, []);
 
   const handleSubjectSelect = (subject) => {
-    // Save subject selection to sessionStorage
+    setLoading(true);
     sessionStorage.setItem('selectedSubject', subject);
     sessionStorage.setItem('selectedExam', examId);
     
-    // Require login before accessing subject
-    navigate('/login', { 
-      state: { 
-        exam: examId.toUpperCase(), 
-        returnTo: `/${examId}/${subject}` 
-      } 
-    });
+    setTimeout(() => {
+      navigate('/login', { 
+        state: { 
+          exam: examId.toUpperCase(), 
+          returnTo: `/${examId}/${subject}` 
+        } 
+      });
+    }, 500);
   };
+
+  if (loading) return <PageLoader message="Loading exam details..." />;
 
   if (examId === 'jamb') {
     return <JAMBLanding onSubjectSelect={handleSubjectSelect} onBackToExams={() => navigate('/')} />;
   }
 
-  // For other exams, redirect to home for now
   navigate('/');
   return null;
 }
@@ -52,20 +62,24 @@ function ExamLandingWrapper() {
 function SubjectSetupWrapper() {
   const { examId, subjectId } = useParams();
   const navigate = useNavigate();
+  const [loading, setLoading] = useState(true);
 
-  // Check authentication
-  const isAuthenticated = sessionStorage.getItem('isAuthenticated');
-  if (!isAuthenticated) {
-    navigate('/login', { 
-      state: { 
-        exam: examId.toUpperCase(), 
-        returnTo: `/${examId}/${subjectId}` 
-      } 
-    });
-    return null;
-  }
+  useEffect(() => {
+    const isAuthenticated = sessionStorage.getItem('isAuthenticated');
+    if (!isAuthenticated) {
+      navigate('/login', { 
+        state: { 
+          exam: examId.toUpperCase(), 
+          returnTo: `/${examId}/${subjectId}` 
+        } 
+      });
+      return;
+    }
 
-  // Find subject by slug
+    const timer = setTimeout(() => setLoading(false), 800);
+    return () => clearTimeout(timer);
+  }, [navigate, examId, subjectId]);
+
   const subject = subjects.find(s => s.slug === subjectId);
   
   if (!subject) {
@@ -74,8 +88,13 @@ function SubjectSetupWrapper() {
   }
 
   const handleStartMock = () => {
-    navigate(`/${examId}/${subjectId}/mock`);
+    setLoading(true);
+    setTimeout(() => {
+      navigate(`/${examId}/${subjectId}/mock`);
+    }, 500);
   };
+
+  if (loading) return <PageLoader message="Preparing your exam..." />;
 
   return (
     <div className="bg-background-light dark:bg-background-dark min-h-screen">

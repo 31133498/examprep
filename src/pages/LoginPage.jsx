@@ -1,6 +1,7 @@
 import { motion } from 'framer-motion';
 import { Icon } from '../components/ui/Icon';
 import { Button } from '../components/ui/Button';
+import { PageLoader } from '../components/ui/PageLoader';
 import { useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 
@@ -8,30 +9,33 @@ export const LoginPage = () => {
   const [isLogin, setIsLogin] = useState(true);
   const [showPassword, setShowPassword] = useState(false);
   const [formData, setFormData] = useState({ identifier: '', password: '', rememberMe: false });
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
   
-  // Get exam context from navigation state
   const examContext = location.state?.exam || 'ExamPrep';
   const returnTo = location.state?.returnTo || '/';
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    setLoading(true);
     
-    // Simulate backend login - save user data
-    const userData = {
-      name: formData.identifier.split('@')[0] || 'Student',
-      email: formData.identifier,
-      loginTime: new Date().toISOString()
-    };
-    
-    // Save to sessionStorage (simulating backend session)
-    sessionStorage.setItem('user', JSON.stringify(userData));
-    sessionStorage.setItem('isAuthenticated', 'true');
-    
-    // Navigate to intended destination
-    navigate(returnTo);
+    // Simulate backend login
+    setTimeout(() => {
+      const userData = {
+        name: formData.identifier.split('@')[0] || 'Student',
+        email: formData.identifier,
+        loginTime: new Date().toISOString()
+      };
+      
+      sessionStorage.setItem('user', JSON.stringify(userData));
+      sessionStorage.setItem('isAuthenticated', 'true');
+      
+      navigate(returnTo);
+    }, 1000);
   };
+
+  if (loading) return <PageLoader message="Authenticating..." />;
 
   return (
     <div className="w-full min-h-screen flex flex-col md:flex-row">
