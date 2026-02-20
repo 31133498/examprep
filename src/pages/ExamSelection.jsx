@@ -77,7 +77,6 @@ export const ExamSelection = () => {
       <ExamGrid onExamSelect={handleExamSelect} />
       <FeaturesSection />
       <TestimonialsSection />
-      <CTASection />
       <Footer />
     </div>
   );
