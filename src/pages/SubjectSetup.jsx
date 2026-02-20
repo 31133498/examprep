@@ -2,10 +2,19 @@ import { motion } from 'framer-motion';
 import { Icon } from '../components/ui/Icon';
 import { Button } from '../components/ui/Button';
 import { Navigation } from '../components/sections/Navigation';
-import { useState } from 'react';
+import { PageLoader } from '../components/ui/PageLoader';
+import { useState, useEffect } from 'react';
 
 export const SubjectSetup = ({ subject, onBack, onStartMock }) => {
   const [questionCount, setQuestionCount] = useState(40);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const timer = setTimeout(() => setLoading(false), 600);
+    return () => clearTimeout(timer);
+  }, []);
+
+  if (loading) return <PageLoader message="Setting up your exam..." />;
 
   return (
     <div className="min-h-screen bg-background-light dark:bg-background-dark">

@@ -10,11 +10,21 @@ import { CTA } from '../components/sections/CTA';
 import { Footer } from '../components/sections/Footer';
 import { Button } from '../components/ui/Button';
 import { Icon } from '../components/ui/Icon';
+import { PageLoader } from '../components/ui/PageLoader';
 import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
+import { useState, useEffect } from 'react';
 
 export const JAMBLanding = ({ onSubjectSelect, onBackToExams }) => {
   const navigate = useNavigate();
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const timer = setTimeout(() => setLoading(false), 700);
+    return () => clearTimeout(timer);
+  }, []);
+
+  if (loading) return <PageLoader message="Loading JAMB resources..." />;
 
   return (
     <div className="min-h-screen bg-white dark:bg-slate-900">

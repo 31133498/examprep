@@ -3,6 +3,7 @@ import { useNavigate, useParams, useLocation } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { Icon } from '../components/ui/Icon';
 import { Button } from '../components/ui/Button';
+import { PageLoader } from '../components/ui/PageLoader';
 
 export function ExamResults() {
   const navigate = useNavigate();
@@ -11,15 +12,20 @@ export function ExamResults() {
   const { score, totalQuestions, timeTaken, skipped, answers, questions } = location.state || {};
   
   const [showLeaderboard, setShowLeaderboard] = useState(false);
+  const [loading, setLoading] = useState(true);
   const user = JSON.parse(sessionStorage.getItem('user') || '{}');
 
   useEffect(() => {
     if (!score && score !== 0) {
       navigate(`/${examId}/${subjectId}`);
+      return;
     }
+    const timer = setTimeout(() => setLoading(false), 800);
+    return () => clearTimeout(timer);
   }, [score, navigate, examId, subjectId]);
 
   if (!score && score !== 0) return null;
+  if (loading) return <PageLoader message="Calculating your results..." />;
 
   const percentage = ((score / totalQuestions) * 100).toFixed(1);
   const accuracy = percentage;
@@ -131,14 +137,10 @@ export function ExamResults() {
 
             <div className="flex flex-wrap justify-center gap-4 w-full max-w-2xl">
               <Button 
-                onClick={() => navigate(`/${examId}/${subjectId}/review`, { state: { answers, questions, score } })}
-                className="flex-1 min-w-[200px] bg-primary hover:bg-primary/90 text-white font-bold py-4 px-8 rounded-lg shadow-lg shadow-primary/20 transition-all flex items-center justify-center gap-2"
-              >
-                <Icon name="visibility" />
-                Review Answers
-              </Button>
-              <Button 
-                onClick={() => navigate(`/${examId}/${subjectId}`)}
+                onClick={() => {
+                  setLoading(true);
+                  setTimeout(() => navigate(`/${examId}/${subjectId}`), 500);
+                }}
                 className="flex-1 min-w-[200px] bg-white dark:bg-slate-800 border-2 border-primary/20 hover:border-primary text-primary font-bold py-4 px-8 rounded-lg transition-all flex items-center justify-center gap-2"
               >
                 <Icon name="refresh" />
