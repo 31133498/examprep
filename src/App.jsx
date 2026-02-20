@@ -3,7 +3,6 @@ import { useState, useEffect } from 'react';
 import { ExamSelection } from './pages/ExamSelection';
 import { JAMBLanding } from './pages/JAMBLanding';
 import { SubjectSetup } from './pages/SubjectSetup';
-import { LoginPage } from './pages/LoginPage';
 import { MockExamPage } from './pages/MockExamPage';
 import { ExamResults } from './pages/ExamResults';
 import { PageLoader } from './components/ui/PageLoader';
@@ -14,7 +13,6 @@ function App() {
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<ExamSelection />} />
-        <Route path="/login" element={<LoginPage />} />
         <Route path="/:examId" element={<ExamLandingWrapper />} />
         <Route path="/:examId/:subjectId" element={<SubjectSetupWrapper />} />
         <Route path="/:examId/:subjectId/mock" element={<MockExamPageWrapper />} />
@@ -40,12 +38,7 @@ function ExamLandingWrapper() {
     sessionStorage.setItem('selectedExam', examId);
     
     setTimeout(() => {
-      navigate('/login', { 
-        state: { 
-          exam: examId.toUpperCase(), 
-          returnTo: `/${examId}/${subject}` 
-        } 
-      });
+      navigate(`/${examId}/${subject}`);
     }, 500);
   };
 
@@ -65,20 +58,9 @@ function SubjectSetupWrapper() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const isAuthenticated = sessionStorage.getItem('isAuthenticated');
-    if (!isAuthenticated) {
-      navigate('/login', { 
-        state: { 
-          exam: examId.toUpperCase(), 
-          returnTo: `/${examId}/${subjectId}` 
-        } 
-      });
-      return;
-    }
-
     const timer = setTimeout(() => setLoading(false), 800);
     return () => clearTimeout(timer);
-  }, [navigate, examId, subjectId]);
+  }, []);
 
   const subject = subjects.find(s => s.slug === subjectId);
   

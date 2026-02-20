@@ -13,7 +13,7 @@ export function ExamResults() {
   
   const [showLeaderboard, setShowLeaderboard] = useState(false);
   const [loading, setLoading] = useState(true);
-  const user = JSON.parse(sessionStorage.getItem('user') || '{}');
+  const user = { name: 'Student' }; // Default user
 
   useEffect(() => {
     if (!score && score !== 0) {
@@ -69,11 +69,9 @@ export function ExamResults() {
             <div className="h-8 w-[1px] bg-primary/20" />
             <div className="flex items-center gap-2">
               <div className="w-8 h-8 rounded-full bg-primary/20 flex items-center justify-center">
-                <span className="text-xs font-bold text-primary">
-                  {user.name?.split(' ').map(n => n[0]).join('').toUpperCase() || 'JD'}
-                </span>
+                <span className="text-xs font-bold text-primary">ST</span>
               </div>
-              <span className="hidden md:block font-medium text-sm">{user.name || 'John Doe'}</span>
+              <span className="hidden md:block font-medium text-sm">Student</span>
             </div>
           </div>
         </div>
@@ -96,7 +94,7 @@ export function ExamResults() {
             </div>
             
             <h1 className="text-3xl md:text-5xl font-bold mb-2">
-              {percentage >= 70 ? `Great job, ${user.name?.split(' ')[0] || 'there'}!` : `Keep going, ${user.name?.split(' ')[0] || 'there'}!`}
+              {percentage >= 70 ? 'Great job!' : 'Keep going!'}
             </h1>
             <p className="text-slate-500 dark:text-slate-400 mb-10 max-w-md mx-auto">
               {getPerformanceMessage()}
@@ -231,7 +229,6 @@ export function ExamResults() {
                         className="w-full px-4 py-3 rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 focus:ring-2 focus:ring-primary focus:border-primary transition-all" 
                         placeholder="e.g. Adebayo Kunle" 
                         type="text"
-                        defaultValue={user.name}
                       />
                     </div>
                     <div>
@@ -240,7 +237,6 @@ export function ExamResults() {
                         className="w-full px-4 py-3 rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 focus:ring-2 focus:ring-primary focus:border-primary transition-all" 
                         placeholder="adebayo@gmail.com" 
                         type="email"
-                        defaultValue={user.email}
                       />
                     </div>
                     <button 

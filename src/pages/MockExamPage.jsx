@@ -26,12 +26,6 @@ export function MockExamPage() {
   const progress = (answeredCount / totalQuestions) * 100;
 
   useEffect(() => {
-    const isAuthenticated = sessionStorage.getItem('isAuthenticated');
-    if (!isAuthenticated) {
-      navigate('/login');
-      return;
-    }
-
     // Load questions from database
     const loadQuestions = async () => {
       try {
