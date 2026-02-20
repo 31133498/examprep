@@ -2,6 +2,7 @@ import { BrowserRouter, Routes, Route, useNavigate, useParams } from 'react-rout
 import { useState, useEffect } from 'react';
 import { ExamSelection } from './pages/ExamSelection';
 import { JAMBLanding } from './pages/JAMBLanding';
+import { SubjectLanding } from './pages/SubjectLanding';
 import { SubjectSetup } from './pages/SubjectSetup';
 import { MockExamPage } from './pages/MockExamPage';
 import { ExamResults } from './pages/ExamResults';
@@ -14,7 +15,8 @@ function App() {
       <Routes>
         <Route path="/" element={<ExamSelection />} />
         <Route path="/:examId" element={<ExamLandingWrapper />} />
-        <Route path="/:examId/:subjectId" element={<SubjectSetupWrapper />} />
+        <Route path="/:examId/:subjectId" element={<SubjectLandingWrapper />} />
+        <Route path="/:examId/:subjectId/setup" element={<SubjectSetupWrapper />} />
         <Route path="/:examId/:subjectId/mock" element={<MockExamPageWrapper />} />
         <Route path="/:examId/:subjectId/results" element={<ExamResults />} />
       </Routes>
@@ -52,6 +54,41 @@ function ExamLandingWrapper() {
   return null;
 }
 
+function SubjectLandingWrapper() {
+  const { examId, subjectId } = useParams();
+  const navigate = useNavigate();
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const timer = setTimeout(() => setLoading(false), 600);
+    return () => clearTimeout(timer);
+  }, []);
+
+  const subject = subjects.find(s => s.slug === subjectId);
+  
+  if (!subject) {
+    navigate(`/${examId}`);
+    return null;
+  }
+
+  const handleStartPractice = () => {
+    setLoading(true);
+    setTimeout(() => {
+      navigate(`/${examId}/${subjectId}/setup`);
+    }, 500);
+  };
+
+  if (loading) return <PageLoader message={`Loading ${subject.name}...`} />;
+
+  return (
+    <SubjectLanding
+      subject={subject}
+      onBack={() => navigate(`/${examId}`)}
+      onStartPractice={handleStartPractice}
+    />
+  );
+}
+
 function SubjectSetupWrapper() {
   const { examId, subjectId } = useParams();
   const navigate = useNavigate();
@@ -82,7 +119,7 @@ function SubjectSetupWrapper() {
     <div className="bg-background-light dark:bg-background-dark min-h-screen">
       <SubjectSetup 
         subject={subject} 
-        onBack={() => navigate(`/${examId}`)} 
+        onBack={() => navigate(`/${examId}/${subjectId}`)} 
         onStartMock={handleStartMock}
       />
     </div>
