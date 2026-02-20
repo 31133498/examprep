@@ -63,7 +63,7 @@ export const Footer = () => {
         </div>
         
         <div className="pt-8 border-t border-slate-800 text-center text-slate-500 text-sm">
-          <p>© 2024 JAMBPrep Platform. All rights reserved. Not affiliated with JAMB Board.</p>
+          <p>© 2025 JAMBPrep Platform. All rights reserved. Not affiliated with JAMB Board.</p>
         </div>
       </div>
     </footer>

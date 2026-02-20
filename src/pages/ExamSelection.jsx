@@ -105,7 +105,7 @@ const ExamHero = () => {
               transition={{ delay: 0.2 }}
             >
               <span className="flex h-2 w-2 rounded-full bg-accent mr-2 animate-pulse" />
-              New 2024 JAMB Past Questions Added
+              New 2025 JAMB Past Questions Added
             </motion.div>
 
             <motion.h1 
